@@ -1,0 +1,1 @@
+A simple blog where you can write, publish, and edit posts. Implement user authentication to allow only the author to edit or delete posts. React for the frontend, PostgreSQL for storing posts and comments, user authentication, and basic CRUD operations.
