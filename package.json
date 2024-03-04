@@ -1,0 +1,11 @@
+{
+  "name": "personal-blog-platform",
+  "version": "1.0.0",
+  "description": "A simple blog where you can write, publish, and edit posts. Implement user authentication to allow only the author to edit or delete posts. React for the frontend, PostgreSQL for storing posts and comments, user authentication, and basic CRUD operations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Siyanda Mayekiso",
+  "license": "ISC"
+}
