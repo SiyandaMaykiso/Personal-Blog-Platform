@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function CreatePost() {
   return <div>Create Post Form will go here.</div>;
