@@ -1,5 +1,6 @@
 import React from 'react';
 import PostsList from './PostsList';
+import CreatePost from './CreatePost'; // Import CreatePost component
 import logo from './logo.svg';
 import './App.css';
 
@@ -12,7 +13,8 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
       </header>
-      <PostsList />
+      <CreatePost /> {/* Include the CreatePost component */}
+      <PostsList /> {/* PostsList component to list posts */}
     </div>
   );
 }
