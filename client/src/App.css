@@ -1,38 +1,40 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  font-family: 'Georgia', serif;
+  color: #333;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: #f8f9fa; /* Light gray for a subtle header background */
+  padding: 20px 0;
+  margin-bottom: 40px; /* Space between header and content */
 }
 
-.App-link {
-  color: #61dafb;
+.App-title {
+  font-size: 2rem;
+  color: #007bff; /* A touch of color */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.App-content {
+  text-align: left;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  color: #333; /* Darker text for headings */
+}
+
+a {
+  color: #007bff;
+  text-decoration: none; /* Style links to match your color scheme */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Remove the .App-logo and related animation styles if you're moving away from the React logo */
+
+/* Additional styles for blog posts, lists, etc., can be added here */
