@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session'); // If using session-based authentication
 const cors = require('cors'); // If needed for development
+const isAuthenticated = require('./middleware/isAuthenticated'); // Import the authentication middleware
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -10,7 +11,7 @@ app.use(cors()); // Enable CORS if your client and server are on different ports
 
 // Session configuration here if using express-session
 app.use(session({
-  secret: 'your_secret_key',
+  secret: process.env.SESSION_SECRET, // Use an environment variable for the secret
   resave: false,
   saveUninitialized: true,
   cookie: { secure: true } // Note: secure cookies should only be used over HTTPS
@@ -18,11 +19,11 @@ app.use(session({
 
 // Import routes
 const postsRoutes = require('./routes/postsRoutes');
-const authRoutes = require('./routes/authRoutes'); // Ensure this file implements user registration and login logic correctly
+const authRoutes = require('./routes/authRoutes');
 
 // Use routes
-app.use('/posts', postsRoutes);
-app.use('/auth', authRoutes); // However, ensure that your authRoutes.js correctly implements the authentication logic, including user registration and login, as discussed in previous instructions.
+app.use('/posts', isAuthenticated, postsRoutes); // Protect the posts routes
+app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
