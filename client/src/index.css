@@ -5,9 +5,47 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa; /* Light gray background */
+  color: #212529; /* Dark gray text */
+  line-height: 1.6;
+  padding: 20px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  background-color: #e9ecef; /* Light background for code */
+  padding: 2px 4px;
+  border-radius: 4px;
 }
+
+/* Container for main content to center it */
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Basic styling for headers */
+h1, h2, h3, h4, h5, h6 {
+  color: #007bff; /* Bootstrap primary blue */
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/* Styling for paragraphs to improve readability */
+p {
+  margin-bottom: 1em;
+}
+
+/* Styling links for better visibility */
+a {
+  color: #007bff;
+  text-decoration: none; /* Removes underline */
+}
+
+a:hover {
+  text-decoration: underline; /* Adds underline on hover */
+}
+
+/* Add more styles as needed for specific components like header, footer, posts, etc. */
