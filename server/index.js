@@ -13,14 +13,16 @@ app.use(session({
   secret: 'your_secret_key',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: { secure: true } // Note: secure cookies should only be used over HTTPS
 }));
 
+// Import routes
 const postsRoutes = require('./routes/postsRoutes');
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes'); // Ensure this file implements user registration and login logic correctly
 
+// Use routes
 app.use('/posts', postsRoutes);
-app.use('/auth', authRoutes);
+app.use('/auth', authRoutes); // However, ensure that your authRoutes.js correctly implements the authentication logic, including user registration and login, as discussed in previous instructions.
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
