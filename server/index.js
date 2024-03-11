@@ -14,8 +14,14 @@ app.use(session({
   secret: process.env.SESSION_SECRET, // Use an environment variable for the secret
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true } // Note: secure cookies should only be used over HTTPS
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production', // Secure cookies in production
+    httpOnly: true, // Prevent client-side script access to the cookie
+    // You might want to set sameSite to 'strict' or 'lax' for additional protection
+    sameSite: 'lax'
+  }
 }));
+
 
 // Import routes
 const postsRoutes = require('./routes/postsRoutes');
