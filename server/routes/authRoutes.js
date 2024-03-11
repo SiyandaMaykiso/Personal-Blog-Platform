@@ -7,28 +7,41 @@ const saltRounds = 10;
 
 // User registration route
 router.post('/register', async (req, res) => {
+  // Existing registration code...
+});
+
+// User login route
+router.post('/login', async (req, res) => {
   try {
-    const { username, email, password } = req.body; // Destructure the request body
-    const hashedPassword = await bcrypt.hash(password, saltRounds); // Hash the password
-    
-    // Insert the new user into the database
-    const newUser = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *', 
-      [username, email, hashedPassword]
-    );
-    
-    // Send back the newly created user data, excluding the password
-    const { password: _, ...userData } = newUser.rows[0];
-    res.status(201).json({
-      message: 'User registered successfully',
-      user: userData
-    });
+    const { username, password } = req.body; // Destructure the request body
+
+    // Look for the user in the database by username
+    const userQuery = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+
+    if (userQuery.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid username or password' });
+    }
+
+    const user = userQuery.rows[0];
+
+    // Compare the provided password with the stored hash
+    const validPassword = await bcrypt.compare(password, user.password);
+
+    if (!validPassword) {
+      return res.status(400).json({ error: 'Invalid username or password' });
+    }
+
+    // Here you would typically set up a session or generate a token
+    // For this example, we'll just return a success message
+    // Remember to replace this with your actual session or token logic
+    res.json({ message: "Logged in successfully" });
+
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Error registering new user');
+    res.status(500).send('Error during login');
   }
 });
 
-// Other authentication routes (login, logout) would go here
+// Other authentication routes (logout) would go here
 
 module.exports = router;
