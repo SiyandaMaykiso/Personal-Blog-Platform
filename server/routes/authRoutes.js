@@ -42,6 +42,25 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// User logout route
+router.post('/logout', (req, res) => {
+    if (req.session) {
+        // Destroy the session
+        req.session.destroy(err => {
+            if (err) {
+                console.error("Error during logout:", err);
+                return res.status(500).send('Error during logout');
+            }
+            // Optionally clear the cookie if you're using one for session handling
+            res.clearCookie('connect.sid'); // Adjust this if your cookie name is different
+            res.json({ message: "Logged out successfully" });
+        });
+    } else {
+        // No session exists, perhaps the user was not logged in to begin with
+        res.status(400).send('No session found or user not logged in');
+    }
+});
+
 // Other authentication routes (logout) would go here
 
 module.exports = router;
