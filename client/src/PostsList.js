@@ -7,8 +7,8 @@ function PostsList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        // Replace with your actual endpoint to fetch posts
-        const response = await axios.get('http://localhost:5000/posts');
+        // The request now uses the proxy setting from package.json
+        const response = await axios.get('/posts');
         setPosts(response.data);
       } catch (error) {
         console.error("Failed to fetch posts:", error);
