@@ -38,20 +38,24 @@ const Login = ({ onLogin }) => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <input
+          id="username"
+          name="username"
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          autoComplete="username" // Set autoComplete attribute for username
+          autoComplete="username"
         />
         <input
+          id="password"
+          name="password"
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="current-password" // Set autoComplete attribute for current password
+          autoComplete="current-password"
         />
         <button type="submit">Login</button>
       </form>
