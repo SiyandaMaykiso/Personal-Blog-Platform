@@ -12,55 +12,36 @@ router.post('/register', async (req, res) => {
 
 // User login route
 router.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body; // Destructure the request body
+  const { username, password } = req.body; // Destructure the request body
 
+  try {
     // Look for the user in the database by username
     const userQuery = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
-
     if (userQuery.rows.length === 0) {
-      return res.status(400).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ message: "Login failed: User not found" });
     }
 
     const user = userQuery.rows[0];
 
     // Compare the provided password with the stored hash
     const validPassword = await bcrypt.compare(password, user.password);
-
     if (!validPassword) {
-      return res.status(400).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ message: "Login failed: Incorrect password" });
     }
 
-    // Here you would typically set up a session or generate a token
-    // For this example, we'll just return a success message
-    // Remember to replace this with your actual session or token logic
-    res.json({ message: "Logged in successfully" });
+    // Omit the password from the user object before sending it back
+    const { password: _, ...userWithoutPassword } = user;
 
+    res.json({ message: "Login successful", user: userWithoutPassword });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Error during login');
+    res.status(500).json({ message: "Server error during login" });
   }
 });
 
 // User logout route
-router.post('/logout', (req, res) => {
-    if (req.session) {
-        // Destroy the session
-        req.session.destroy(err => {
-            if (err) {
-                console.error("Error during logout:", err);
-                return res.status(500).send('Error during logout');
-            }
-            // Optionally clear the cookie if you're using one for session handling
-            res.clearCookie('connect.sid'); // Adjust this if your cookie name is different
-            res.json({ message: "Logged out successfully" });
-        });
-    } else {
-        // No session exists, perhaps the user was not logged in to begin with
-        res.status(400).send('No session found or user not logged in');
-    }
-});
+// ... existing logout code ...
 
-// Other authentication routes (logout) would go here
+// Other authentication routes (if any) would go here
 
 module.exports = router;
