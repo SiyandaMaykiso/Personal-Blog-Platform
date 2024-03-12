@@ -2,29 +2,26 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({ onLogin }) => { // Add onLogin as a prop
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState(''); // State to display error messages
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submit action
+    e.preventDefault();
     
     try {
-      // Replace 'http://localhost:3001/auth/login' with your actual login endpoint
       const response = await axios.post('http://localhost:3001/auth/login', {
         username,
         password,
       });
       
-      console.log(response.data); // Handle response
+      // If login is successful, call onLogin with the user's data
+      onLogin(response.data.user);
+      console.log(response.data); // Log the successful login message
       setErrorMessage(''); // Clear any previous error messages
-      
-      // Perform any actions following successful login, such as redirecting the user
     } catch (error) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx, or an error occurred during the request
-      console.log('Error', error.response ? error.response.data : error.message);
+      console.error('Error', error.response ? error.response.data : error.message);
       setErrorMessage(error.response ? error.response.data.message : 'Error logging in');
     }
   };
@@ -47,7 +44,7 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="current-password" // Added autoComplete attribute
+          autoComplete="current-password"
         />
         <button type="submit">Login</button>
       </form>
