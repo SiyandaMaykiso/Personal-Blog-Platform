@@ -10,23 +10,26 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Include credentials in the Axios request
       const response = await axios.post('http://localhost:3001/auth/login', {
         username,
         password,
+      }, {
+        withCredentials: true // This will ensure cookies are included with the request
       });
 
       // If login is successful, call onLogin with the user's data
       if (response.data.user) {
-        onLogin(response.data.user);
+        onLogin(response.data.user); // This function should update the parent component's state
         console.log('Login successful:', response.data.message);
-        setErrorMessage('');
-        // Redirect user or update UI
+        setErrorMessage(''); // Clear any error messages
+        // Redirect user or update UI based on your app's flow
       } else {
-        // Handle case where login is not successful
+        // Handle cases where login is not successful but no server error occurred
         setErrorMessage('Login failed: No user data returned.');
       }
     } catch (error) {
-      // Handle error in request or in response
+      // Handle cases where an error occurred during the request
       setErrorMessage(error.response ? error.response.data.message : 'Error logging in');
       console.error('Login error:', error.response ? error.response.data : error.message);
     }
@@ -45,7 +48,7 @@ const Login = ({ onLogin }) => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          autoComplete="username"
+          autoComplete="username" // Helps with auto-filling the username
         />
         <input
           id="password"
@@ -55,7 +58,7 @@ const Login = ({ onLogin }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="current-password"
+          autoComplete="current-password" // Helps with auto-filling the password
         />
         <button type="submit">Login</button>
       </form>
