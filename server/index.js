@@ -6,22 +6,26 @@ const isAuthenticated = require('./middleware/isAuthenticated'); // Import the a
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Specify origin and credentials for CORS
+const corsOptions = {
+  origin: 'http://localhost:3000', // This should match the URL of your frontend application
+  credentials: true, // This allows session cookies to be sent back and forth
+};
+
 app.use(express.json());
-app.use(cors()); // Enable CORS if your client and server are on different ports during development
+app.use(cors(corsOptions)); // Updated to use corsOptions
 
-// Session configuration here if using express-session
+// Session configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Use an environment variable for the secret
+  secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
-  cookie: { 
-    secure: process.env.NODE_ENV === 'production', // Secure cookies in production
-    httpOnly: true, // Prevent client-side script access to the cookie
-    // You might want to set sameSite to 'strict' or 'lax' for additional protection
-    sameSite: 'lax'
-  }
+  saveUninitialized: false, // Changed to false for uninitialized sessions
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax',
+  },
 }));
-
 
 // Import routes
 const postsRoutes = require('./routes/postsRoutes');
@@ -42,7 +46,6 @@ app.use((err, req, res, next) => {
   console.error("Error stack: ", err.stack);
   res.status(err.status || 500).send('Something broke!');
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
