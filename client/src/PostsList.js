@@ -7,8 +7,8 @@ function PostsList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        // The request now uses the proxy setting from package.json
-        const response = await axios.get('/posts');
+        // Ensure withCredentials is true for cookies to be sent with the request
+        const response = await axios.get('/posts', { withCredentials: true });
         setPosts(response.data);
       } catch (error) {
         console.error("Failed to fetch posts:", error);

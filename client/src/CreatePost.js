@@ -14,8 +14,11 @@ function CreatePost() {
     }
 
     try {
-      // Replace 'http://localhost:5000/posts' with your actual endpoint
-      const response = await axios.post('http://localhost:5000/posts', { title, content });
+      // Ensure this URL matches your backend endpoint for creating a post
+      // and includes withCredentials to send cookies with the request.
+      const response = await axios.post('http://localhost:3001/posts', { title, content }, {
+        withCredentials: true // This will ensure cookies are included with the request
+      });
       
       // Assuming the API returns the created post object
       console.log('Post created:', response.data);
