@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
@@ -40,13 +41,17 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: "Login failed: Incorrect password" });
     }
 
+    // Generate a JWT token after successful login
+    const token = jwt.sign(
+      { userId: user.id }, // Payload
+      process.env.JWT_SECRET, // Secret
+      { expiresIn: '1h' } // Token Expiration
+    );
+
     // Omit the password from the user object before sending it back
     const userWithoutPassword = { ...user, password: undefined };
 
-    // Set the user object in the session
-    req.session.user = userWithoutPassword;
-
-    res.json({ message: "Login successful", user: userWithoutPassword });
+    res.json({ message: "Login successful", user: userWithoutPassword, token }); // Include the token in the response
   } catch (error) {
     console.error("Server error during login:", error.message);
     res.status(500).json({ message: "Server error during login" });
