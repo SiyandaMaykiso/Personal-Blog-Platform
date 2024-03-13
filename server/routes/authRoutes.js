@@ -1,14 +1,27 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
-const pool = require('../db'); // Ensure this path accurately points to your DB connection setup
+const pool = require('../db'); // Make sure this path is correct for your database connection setup
 
-const saltRounds = 10;
+// Assuming your user's table column for the hashed password is named 'password'
 
 // User registration route
 router.post('/register', async (req, res) => {
-  // Your existing registration code here
-  // Ensure the password is hashed before storing it in the database
+  const { username, email, password } = req.body;
+  const saltRounds = 10;
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const newUser = await pool.query(
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
+      [username, email, hashedPassword]
+    );
+    const userWithoutPassword = { ...newUser.rows[0], password: undefined };
+    res.status(201).json({ message: "User registered successfully", user: userWithoutPassword });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Server error during registration" });
+  }
 });
 
 // User login route
@@ -22,18 +35,16 @@ router.post('/login', async (req, res) => {
     }
 
     const user = userQuery.rows[0];
-    // Correctly use the 'password' column for hash comparison
-    const validPassword = await bcrypt.compare(password, user.password); // Adjusted to use 'password'
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(401).json({ message: "Login failed: Incorrect password" });
     }
 
     // Omit the password from the user object before sending it back
-    const { password: _, ...userWithoutPassword } = user; // Exclude the password
+    const userWithoutPassword = { ...user, password: undefined };
 
-    // Implement your session or token logic here
-    // e.g., req.session.user = userWithoutPassword for session-based auth
-    // or return a JWT token for token-based auth
+    // Set the user object in the session
+    req.session.user = userWithoutPassword;
 
     res.json({ message: "Login successful", user: userWithoutPassword });
   } catch (error) {
@@ -43,8 +54,19 @@ router.post('/login', async (req, res) => {
 });
 
 // User logout route
-// Implement your logout logic here, if using sessions, destroy the session
-
-// Other authentication routes (if any) would go here
+router.post('/logout', (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error during logout:", err);
+        return res.status(500).send('Error during logout');
+      }
+      res.clearCookie('connect.sid'); // Adjust this if your session cookie name is different
+      res.json({ message: "Logged out successfully" });
+    });
+  } else {
+    res.status(400).send('No session found or user not logged in');
+  }
+});
 
 module.exports = router;
