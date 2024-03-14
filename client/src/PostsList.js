@@ -3,13 +3,19 @@ import axios from 'axios';
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
-  // Assuming you store the logged-in user's information in localStorage under 'user'
+  // Assuming you store the logged-in user's information and token in localStorage
   const loggedInUser = JSON.parse(localStorage.getItem('user'));
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('/posts', { withCredentials: true });
+        const response = await axios.get('/posts', {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setPosts(response.data);
       } catch (error) {
         console.error("Failed to fetch posts:", error);
@@ -19,15 +25,26 @@ function PostsList() {
     fetchPosts();
   }, []);
 
-  // Placeholder functions for edit and delete functionality
-  const editPost = (postId) => {
+  const editPost = async (postId) => {
     console.log(`Editing post ${postId}`);
-    // Implement editing logic here
+    // Placeholder for edit functionality
+    // You would likely open a modal or redirect to a form page
   };
 
-  const deletePost = (postId) => {
+  const deletePost = async (postId) => {
     console.log(`Deleting post ${postId}`);
-    // Implement deletion logic here
+    try {
+      await axios.delete(`/posts/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // Remove the deleted post from the state
+      setPosts(posts.filter((post) => post.id !== postId));
+      console.log("Post deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+    }
   };
 
   return (
@@ -41,10 +58,10 @@ function PostsList() {
               <p>{post.content}</p>
               {/* Conditional rendering for edit and delete options */}
               {loggedInUser && post.authorId === loggedInUser.userId && (
-                <>
+                <div>
                   <button onClick={() => editPost(post.id)}>Edit</button>
                   <button onClick={() => deletePost(post.id)}>Delete</button>
-                </>
+                </div>
               )}
             </li>
           ))}
