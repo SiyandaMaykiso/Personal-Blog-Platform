@@ -3,18 +3,39 @@
   "name": "Personal Blog Platform",
   "icons": [
     {
-      "src": "Blog Photo 1.jpg",
-      "type": "image/jpeg",
-      "sizes": "640x480" 
+      "src": "favicon.ico",
+      "sizes": "256x256",
+      "type": "image/x-icon"
     },
     {
-      "src": "Blog Photo 2.jpg",
-      "type": "image/jpeg",
-      "sizes": "600x400" 
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "screenshots": [
+    {
+      "src": "desktop-screenshot.jpg",
+      "type": "image/jpeg",
+      "sizes": "1920x1080",
+      "platform": "wide",
+      "form_factor": "wide",
+      "label": "Desktop screenshot"
+    },
+    {
+      "src": "mobile-screenshot.jpg",
+      "type": "image/jpeg",
+      "sizes": "1080x1920",
+      "label": "Mobile screenshot"
+    }
+  ]
 }

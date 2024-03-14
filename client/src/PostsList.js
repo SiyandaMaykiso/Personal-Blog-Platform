@@ -3,15 +3,15 @@ import axios from 'axios';
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
-  // Assuming you store the logged-in user's information and token in localStorage
-  const loggedInUser = JSON.parse(localStorage.getItem('user'));
+  // Retrieve the token and user information from localStorage
   const token = localStorage.getItem('token');
+  const loggedInUser = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('/posts', {
-          withCredentials: true,
+        // Ensure the request includes the Authorization header
+        const response = await axios.get('http://localhost:3001/posts', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -23,25 +23,26 @@ function PostsList() {
     };
 
     fetchPosts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]); // Depend on the token to refetch when it changes
 
   const editPost = async (postId) => {
-    console.log(`Editing post ${postId}`);
     // Placeholder for edit functionality
-    // You would likely open a modal or redirect to a form page
+    console.log(`Editing post ${postId}`);
+    // Implement edit logic here
   };
 
   const deletePost = async (postId) => {
+    // Placeholder for delete functionality
     console.log(`Deleting post ${postId}`);
     try {
-      await axios.delete(`/posts/${postId}`, {
+      // Use the token in the Authorization header to authenticate the request
+      await axios.delete(`http://localhost:3001/posts/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      // Remove the deleted post from the state
-      setPosts(posts.filter((post) => post.id !== postId));
+      // Update the posts state to reflect the deletion
+      setPosts(currentPosts => currentPosts.filter(post => post.id !== postId));
       console.log("Post deleted successfully");
     } catch (error) {
       console.error("Failed to delete post:", error);
@@ -57,7 +58,7 @@ function PostsList() {
             <li key={post.id}>
               <h3>{post.title}</h3>
               <p>{post.content}</p>
-              {/* Conditional rendering for edit and delete options */}
+              {/* Render edit and delete buttons only for the author of the post */}
               {loggedInUser && post.authorId === loggedInUser.userId && (
                 <div>
                   <button onClick={() => editPost(post.id)}>Edit</button>
