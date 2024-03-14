@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
+const verifyToken = require('../middleware/verifyToken'); // Adjust path as necessary
 
 // Mock data for demonstration
 let posts = [
-    { id: 1, title: 'First Post', content: 'This is the first post' },
-    { id: 2, title: 'Second Post', content: 'This is the second post' },
+    { id: 1, title: 'First Post', content: 'This is the first post', authorId: 'userId1' },
+    { id: 2, title: 'Second Post', content: 'This is the second post', authorId: 'userId2' },
 ];
 
-// Get all posts
-router.get('/', (req, res) => {
+// Apply the verifyToken middleware to routes that require authentication
+router.get('/', verifyToken, (req, res) => {
     res.json(posts);
 });
 
-// Get a single post by ID
-router.get('/:id', (req, res) => {
+router.get('/:id', verifyToken, (req, res) => {
     const post = posts.find(p => p.id === parseInt(req.params.id));
     if (post) {
         res.json(post);
@@ -22,37 +22,35 @@ router.get('/:id', (req, res) => {
     }
 });
 
-// Create a new post
-router.post('/', (req, res) => {
-    // For a real application, you would validate input and potentially generate a unique ID
+router.post('/', verifyToken, (req, res) => {
+    // Example of creating a new post with authorId
     const newPost = {
-        id: posts.length + 1, // Simplistic approach for ID
+        id: posts.length + 1,
         title: req.body.title,
         content: req.body.content,
+        authorId: req.userId // Assuming the verifyToken middleware sets req.userId
     };
     posts.push(newPost);
     res.status(201).send(newPost);
 });
 
-// Update an existing post
-router.put('/:id', (req, res) => {
+router.put('/:id', verifyToken, (req, res) => {
     const index = posts.findIndex(p => p.id === parseInt(req.params.id));
-    if (index !== -1) {
+    if (index !== -1 && posts[index].authorId === req.userId) { // Check authorship
         posts[index] = { ...posts[index], ...req.body };
         res.send(posts[index]);
     } else {
-        res.status(404).send('Post not found');
+        res.status(403).send('Not authorized to edit this post');
     }
 });
 
-// Delete a post
-router.delete('/:id', (req, res) => {
+router.delete('/:id', verifyToken, (req, res) => {
     const index = posts.findIndex(p => p.id === parseInt(req.params.id));
-    if (index !== -1) {
+    if (index !== -1 && posts[index].authorId === req.userId) { // Check authorship
         posts = posts.filter(p => p.id !== parseInt(req.params.id));
         res.send('Post deleted');
     } else {
-        res.status(404).send('Post not found');
+        res.status(403).send('Not authorized to delete this post');
     }
 });
 
