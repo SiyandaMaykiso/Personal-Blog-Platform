@@ -23,6 +23,7 @@ function PostsList() {
     };
 
     fetchPosts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const editPost = async (postId) => {
