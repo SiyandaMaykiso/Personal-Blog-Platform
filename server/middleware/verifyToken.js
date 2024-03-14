@@ -1,23 +1,15 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware to verify the token
-const verifyToken = (req, res, next) => {
-  // Get the token from the Authorization header
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const token = authHeader.split(' ')[1]; // Bearer TOKEN_VALUE
+// Example JWT token (replace with your actual token)
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTcxMDQ1Mzg0NywiZXhwIjoxNzEwNDU3NDQ3fQ.dxIa6U4dVQShADyB6uTStQ8eazSIvnIMABxbth9Y2i0";
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.sendStatus(403); // Invalid token
-      }
+// Your JWT secret (replace with your actual JWT secret)
+const JWT_SECRET = "99ca849e6d025b8ac70cde30721209b2eb6e78835f725287b46ffdd48e7a51faf591b175296d077625486dc7e3d32c24ea485eb2510c095a5e43d00acf061772";
 
-      req.user = user; // Add user to request
-      next();
-    });
+jwt.verify(token, JWT_SECRET, (err, decoded) => {
+  if (err) {
+    console.error("Token verification failed:", err);
   } else {
-    res.sendStatus(401); // Unauthorized
+    console.log("Token is valid. Decoded payload:", decoded);
   }
-};
-
-module.exports = verifyToken;
+});
