@@ -1,4 +1,3 @@
-// Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -10,7 +9,6 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Include credentials in the Axios request
       const response = await axios.post('http://localhost:3001/auth/login', {
         username,
         password,
@@ -18,18 +16,19 @@ const Login = ({ onLogin }) => {
         withCredentials: true // This will ensure cookies are included with the request
       });
 
-      // If login is successful, call onLogin with the user's data
-      if (response.data.user) {
-        onLogin(response.data.user); // This function should update the parent component's state
+      // Check if the response includes a token
+      if (response.data.token) {
+        // Save the token and user info in localStorage or your state management solution
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+
+        onLogin(response.data.user); // Update parent component state or perform further actions
         console.log('Login successful:', response.data.message);
         setErrorMessage(''); // Clear any error messages
-        // Redirect user or update UI based on your app's flow
       } else {
-        // Handle cases where login is not successful but no server error occurred
-        setErrorMessage('Login failed: No user data returned.');
+        setErrorMessage('Login failed: No user data or token returned.');
       }
     } catch (error) {
-      // Handle cases where an error occurred during the request
       setErrorMessage(error.response ? error.response.data.message : 'Error logging in');
       console.error('Login error:', error.response ? error.response.data : error.message);
     }
@@ -48,7 +47,7 @@ const Login = ({ onLogin }) => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          autoComplete="username" // Helps with auto-filling the username
+          autoComplete="username"
         />
         <input
           id="password"
@@ -58,7 +57,7 @@ const Login = ({ onLogin }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="current-password" // Helps with auto-filling the password
+          autoComplete="current-password"
         />
         <button type="submit">Login</button>
       </form>
