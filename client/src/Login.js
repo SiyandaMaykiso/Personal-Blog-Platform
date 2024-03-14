@@ -13,14 +13,17 @@ const Login = ({ onLogin }) => {
         username,
         password,
       }, {
-        withCredentials: true // This will ensure cookies are included with the request
+        withCredentials: true // Ensure cookies are included with the request
       });
 
       // Check if the response includes a token
       if (response.data.token) {
-        // Save the token and user info in localStorage or your state management solution
+        // Save the token in localStorage
         localStorage.setItem('token', response.data.token);
+        // Optionally save user info if needed
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Set the default authorization header for subsequent Axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
         onLogin(response.data.user); // Update parent component state or perform further actions
         console.log('Login successful:', response.data.message);
