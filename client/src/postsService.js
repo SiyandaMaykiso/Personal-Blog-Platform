@@ -1,62 +1,30 @@
-import React, { useState, useEffect } from 'react';
+// postsService.js
 import axios from 'axios';
 
-function PostsList() {
-  const [posts, setPosts] = useState([]);
+const baseUrl = 'http://localhost:3001/posts'; // Adjust if your API's base URL is different
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        // Requests now rely on session cookies instead of JWTs
-        const response = await axios.get('http://localhost:3001/posts', {
-          withCredentials: true // Ensure cookies are included with the request
-        });
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Failed to fetch posts:", error);
-      }
-    };
+// Fetch all posts
+const fetchPosts = async () => {
+  const response = await axios.get(baseUrl, { withCredentials: true });
+  return response.data;
+};
 
-    fetchPosts();
-  }, []); // Removed token dependency
+// Add a new post
+const createPost = async (postData) => {
+  const response = await axios.post(baseUrl, postData, { withCredentials: true });
+  return response.data;
+};
 
-  const editPost = async (postId) => {
-    console.log(`Editing post ${postId}`);
-    // Implement edit functionality here. Remember to use withCredentials for authenticated requests
-  };
+// Update a post by ID
+const editPost = async (id, postData) => {
+  const response = await axios.put(`${baseUrl}/${id}`, postData, { withCredentials: true });
+  return response.data;
+};
 
-  const deletePost = async (postId) => {
-    console.log(`Deleting post ${postId}`);
-    try {
-      await axios.delete(`http://localhost:3001/posts/${postId}`, {
-        withCredentials: true // Ensure cookies are included with the request for authentication
-      });
-      setPosts(currentPosts => currentPosts.filter(post => post.id !== postId));
-      console.log("Post deleted successfully");
-    } catch (error) {
-      console.error("Failed to delete post:", error);
-    }
-  };
+// Delete a post by ID
+const deletePost = async (id) => {
+  await axios.delete(`${baseUrl}/${id}`, { withCredentials: true });
+};
 
-  return (
-    <div>
-      <h2>Posts</h2>
-      {posts.length > 0 ? (
-        <ul>
-          {posts.map((post) => (
-            <li key={post.id}>
-              <h3>{post.title}</h3>
-              <p>{post.content}</p>
-              {/* Conditionally render edit and delete buttons based on user session information. */}
-              {/* This will require adjustments to ensure the logged-in user's ID is available for comparison. */}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No posts found.</p>
-      )}
-    </div>
-  );
-}
-
-export default PostsList;
+// Export the functions for use in other parts of your application
+export default { fetchPosts, createPost, editPost, deletePost };

@@ -1,10 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders create post interface', () => {
+test('renders login and registration prompts if not logged in', () => {
   render(<App />);
-  // Example: Check for a specific part of your CreatePost component.
-  // Adjust this to match something specific in your CreatePost or App component.
-  const headerElement = screen.getByText(/create post/i);
-  expect(headerElement).toBeInTheDocument();
+  // Assuming "Please log in" is unique to the unauthenticated state
+  const loginPrompt = screen.getByText(/please log in to view posts and create new ones./i);
+  expect(loginPrompt).toBeInTheDocument();
 });
