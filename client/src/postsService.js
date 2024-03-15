@@ -1,4 +1,3 @@
-// postsService.js
 import axios from 'axios';
 
 const baseUrl = 'http://localhost:3001/posts'; // Adjust if your API's base URL is different
@@ -26,5 +25,6 @@ const deletePost = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, { withCredentials: true });
 };
 
-// Export the functions for use in other parts of your application
-export default { fetchPosts, createPost, editPost, deletePost };
+const postsService = { fetchPosts, createPost, editPost, deletePost };
+
+export default postsService;
