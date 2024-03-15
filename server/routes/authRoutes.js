@@ -4,7 +4,14 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const pool = require('../db'); // Make sure this path is correct for your database connection setup
 
-// Assuming your user's table column for the hashed password is named 'password'
+// Function to generate JWT token
+const generateToken = (user) => {
+  return jwt.sign(
+    { userId: user.id }, // Payload with user's ID
+    process.env.JWT_SECRET, // Secret key from environment variables
+    { expiresIn: '1h' } // Token expiration time
+  );
+};
 
 // User registration route
 router.post('/register', async (req, res) => {
@@ -41,12 +48,8 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: "Login failed: Incorrect password" });
     }
 
-    // Generate a JWT token after successful login
-    const token = jwt.sign(
-      { userId: user.id }, // Payload
-      process.env.JWT_SECRET, // Secret
-      { expiresIn: '1h' } // Token Expiration
-    );
+    // Generate a JWT token after successful login using the new function
+    const token = generateToken(user);
 
     // Omit the password from the user object before sending it back
     const userWithoutPassword = { ...user, password: undefined };
@@ -60,18 +63,8 @@ router.post('/login', async (req, res) => {
 
 // User logout route
 router.post('/logout', (req, res) => {
-  if (req.session) {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error("Error during logout:", err);
-        return res.status(500).send('Error during logout');
-      }
-      res.clearCookie('connect.sid'); // Adjust this if your session cookie name is different
-      res.json({ message: "Logged out successfully" });
-    });
-  } else {
-    res.status(400).send('No session found or user not logged in');
-  }
+  // Logout functionality might be revised since JWT doesn't use server-side sessions
+  res.status(200).send('Logout functionality with JWT typically involves the client deleting the stored token.');
 });
 
 module.exports = router;

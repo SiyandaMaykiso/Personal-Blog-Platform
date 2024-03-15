@@ -1,15 +1,30 @@
 const jwt = require('jsonwebtoken');
 
-// Example JWT token (replace with your actual token)
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTcxMDQ1Mzg0NywiZXhwIjoxNzEwNDU3NDQ3fQ.dxIa6U4dVQShADyB6uTStQ8eazSIvnIMABxbth9Y2i0";
-
-// Your JWT secret (replace with your actual JWT secret)
-const JWT_SECRET = "99ca849e6d025b8ac70cde30721209b2eb6e78835f725287b46ffdd48e7a51faf591b175296d077625486dc7e3d32c24ea485eb2510c095a5e43d00acf061772";
-
-jwt.verify(token, JWT_SECRET, (err, decoded) => {
-  if (err) {
-    console.error("Token verification failed:", err);
-  } else {
-    console.log("Token is valid. Decoded payload:", decoded);
+// Middleware function to verify JWT tokens
+const verifyToken = (req, res, next) => {
+  // Extract the token from the request's authorization header
+  // Typically, the header is "Authorization: Bearer TOKEN"
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Access denied. No token provided.' });
   }
-});
+
+  const token = authHeader.split(' ')[1]; // Extract the token part
+
+  // Your JWT secret (ensure this is securely stored and accessed)
+  const JWT_SECRET = process.env.JWT_SECRET || "your_fallback_secret_here"; // Fallback secret for demonstration; use environment variable in production
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      // If token verification fails, return an unauthorized status
+      return res.status(401).json({ message: 'Invalid token.' });
+    }
+    // If token is valid, attach the decoded user payload to the request object
+    req.user = decoded;
+
+    // Proceed to the next middleware function or route handler
+    next();
+  });
+};
+
+module.exports = verifyToken;
