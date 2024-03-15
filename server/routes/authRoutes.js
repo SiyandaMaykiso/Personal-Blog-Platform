@@ -6,7 +6,23 @@ require('dotenv').config();
 
 // User registration route
 router.post('/register', async (req, res) => {
-  // Implement registration logic here
+  const { username, email, password } = req.body;
+  const saltRounds = 10;
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const newUser = await pool.query(
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
+      [username, email, hashedPassword]
+    );
+
+    // Exclude password from the result for security
+    const { password: _, ...userWithoutPassword } = newUser.rows[0];
+    res.status(201).json({ message: "User registered successfully", user: userWithoutPassword });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Server error during registration" });
+  }
 });
 
 // User login route
@@ -22,8 +38,12 @@ router.post('/login', async (req, res) => {
     const user = userQuery.rows[0];
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
+      // Store user information in session
       req.session.user = { userId: user.id, username: user.username };
-      res.json({ message: "Login successful" });
+      
+      // Send back user data without password
+      const { password: _, ...userWithoutPassword } = user;
+      res.json({ message: "Login successful", user: userWithoutPassword });
     } else {
       res.status(401).json({ message: "Login failed: Incorrect password" });
     }
