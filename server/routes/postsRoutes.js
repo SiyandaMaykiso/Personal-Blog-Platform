@@ -1,56 +1,87 @@
 const express = require('express');
 const router = express.Router();
-const isAuthenticated = require('../middleware/isAuthenticated'); // Ensure this path is correctly relative to your file structure
+const isAuthenticated = require('../middleware/isAuthenticated');
+const pool = require('../db'); // Assuming you have a db.js that exports a Pool instance
 
-// Mock data for demonstration
-let posts = [
-    { id: 1, title: 'First Post', content: 'This is the first post', authorId: 'userId1' },
-    { id: 2, title: 'Second Post', content: 'This is the second post', authorId: 'userId2' },
-];
-
-// Apply the isAuthenticated middleware to routes that require authentication
-router.get('/', isAuthenticated, (req, res) => {
-    res.json(posts);
-});
-
-router.get('/:id', isAuthenticated, (req, res) => {
-    const post = posts.find(p => p.id === parseInt(req.params.id));
-    if (post) {
-        res.json(post);
-    } else {
-        res.status(404).json({ message: 'Post not found' });
+// Fetch all posts
+router.get('/', isAuthenticated, async (req, res) => {
+    try {
+        const { rows } = await pool.query('SELECT * FROM posts');
+        res.json(rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch posts" });
     }
 });
 
-router.post('/', isAuthenticated, (req, res) => {
-    // Example of creating a new post with the authorId from session
-    const newPost = {
-        id: posts.length + 1,
-        title: req.body.title,
-        content: req.body.content,
-        authorId: req.session.user.userId // Retrieve userId from session
-    };
-    posts.push(newPost);
-    res.status(201).json(newPost);
-});
-
-router.put('/:id', isAuthenticated, (req, res) => {
-    const index = posts.findIndex(p => p.id === parseInt(req.params.id));
-    if (index !== -1 && posts[index].authorId === req.session.user.userId) { // Check authorship from session
-        posts[index] = { ...posts[index], ...req.body };
-        res.json(posts[index]);
-    } else {
-        res.status(403).json({ message: 'Not authorized to edit this post' });
+// Fetch a single post by id
+router.get('/:id', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { rows } = await pool.query('SELECT * FROM posts WHERE id = $1', [id]);
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).json({ message: 'Post not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch post" });
     }
 });
 
-router.delete('/:id', isAuthenticated, (req, res) => {
-    const index = posts.findIndex(p => p.id === parseInt(req.params.id));
-    if (index !== -1 && posts[index].authorId === req.session.user.userId) { // Check authorship from session
-        posts = posts.filter(p => p.id !== parseInt(req.params.id));
-        res.json({ message: 'Post deleted' });
-    } else {
-        res.status(403).json({ message: 'Not authorized to delete this post' });
+// Create a new post
+router.post('/', isAuthenticated, async (req, res) => {
+    const { title, content } = req.body;
+    const authorId = req.session.user.userId; // Assuming session contains user ID
+    try {
+        const { rows } = await pool.query(
+            'INSERT INTO posts (title, content, authorId) VALUES ($1, $2, $3) RETURNING *',
+            [title, content, authorId]
+        );
+        res.status(201).json(rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to create post" });
+    }
+});
+
+// Update a post
+router.put('/:id', isAuthenticated, async (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    try {
+        const { rows } = await pool.query(
+            'UPDATE posts SET title = $1, content = $2 WHERE id = $3 AND authorId = $4 RETURNING *',
+            [title, content, id, req.session.user.userId]
+        );
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).json({ message: 'Post not found or not authorized' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to update post" });
+    }
+});
+
+// Delete a post
+router.delete('/:id', isAuthenticated, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const { rowCount } = await pool.query(
+            'DELETE FROM posts WHERE id = $1 AND authorId = $2',
+            [id, req.session.user.userId]
+        );
+        if (rowCount > 0) {
+            res.json({ message: 'Post deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Post not found or not authorized' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to delete post" });
     }
 });
 
