@@ -1,58 +1,62 @@
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+function PostsList() {
+  const [posts, setPosts] = useState([]);
 
-const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-    // Include other headers as needed, e.g., Authorization for Bearer tokens
-    // 'Authorization': `Bearer ${userToken}`, // Uncomment and use as needed
-  }
-});
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        // Requests now rely on session cookies instead of JWTs
+        const response = await axios.get('http://localhost:3001/posts', {
+          withCredentials: true // Ensure cookies are included with the request
+        });
+        setPosts(response.data);
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      }
+    };
 
-// Get all posts
-export const getAllPosts = async () => {
-  try {
-    const response = await axiosInstance.get('/posts');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    // Optionally, transform the error into a user-friendly message here
-    throw error;
-  }
-};
+    fetchPosts();
+  }, []); // Removed token dependency
 
-// Create a new post
-export const createPost = async (post) => {
-  try {
-    const response = await axiosInstance.post('/posts', post);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating a post:', error);
-    // Optionally, transform the error into a user-friendly message here
-    throw error;
-  }
-};
+  const editPost = async (postId) => {
+    console.log(`Editing post ${postId}`);
+    // Implement edit functionality here. Remember to use withCredentials for authenticated requests
+  };
 
-// Placeholder for update post function
-export const updatePost = async (id, postUpdates) => {
-  try {
-    const response = await axiosInstance.put(`/posts/${id}`, postUpdates);
-    return response.data;
-  } catch (error) {
-    console.error('Error updating post:', error);
-    throw error;
-  }
-};
+  const deletePost = async (postId) => {
+    console.log(`Deleting post ${postId}`);
+    try {
+      await axios.delete(`http://localhost:3001/posts/${postId}`, {
+        withCredentials: true // Ensure cookies are included with the request for authentication
+      });
+      setPosts(currentPosts => currentPosts.filter(post => post.id !== postId));
+      console.log("Post deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+    }
+  };
 
-// Placeholder for delete post function
-export const deletePost = async (id) => {
-  try {
-    const response = await axiosInstance.delete(`/posts/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error deleting post:', error);
-    throw error;
-  }
-};
+  return (
+    <div>
+      <h2>Posts</h2>
+      {posts.length > 0 ? (
+        <ul>
+          {posts.map((post) => (
+            <li key={post.id}>
+              <h3>{post.title}</h3>
+              <p>{post.content}</p>
+              {/* Conditionally render edit and delete buttons based on user session information. */}
+              {/* This will require adjustments to ensure the logged-in user's ID is available for comparison. */}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No posts found.</p>
+      )}
+    </div>
+  );
+}
+
+export default PostsList;

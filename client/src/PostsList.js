@@ -9,6 +9,16 @@ function PostsList() {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      // Log the token for debugging purposes
+      console.log('Token from localStorage:', token);
+
+      // Check if the token is available
+      if (!token) {
+        console.error('Authentication token not found. Please log in.');
+        // Here you could redirect to the login page or display a message
+        return;
+      }
+
       try {
         // Ensure the request includes the Authorization header
         const response = await axios.get('http://localhost:3001/posts', {

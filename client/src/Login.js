@@ -16,22 +16,17 @@ const Login = ({ onLogin }) => {
         withCredentials: true // Ensure cookies are included with the request
       });
 
-      // Check if the response includes a token
-      if (response.data.token) {
-        // Save the token in localStorage
-        localStorage.setItem('token', response.data.token);
-        // Optionally save user info if needed
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        // Set the default authorization header for subsequent Axios requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-
+      // Assuming the server sends back user data on successful login
+      if (response.data.user) {
         onLogin(response.data.user); // Update parent component state or perform further actions
         console.log('Login successful:', response.data.message);
         setErrorMessage(''); // Clear any error messages
       } else {
-        setErrorMessage('Login failed: No user data or token returned.');
+        // Handle cases where login is successful but no user data is returned
+        setErrorMessage('Login failed: No user data returned.');
       }
     } catch (error) {
+      // Handle login errors
       setErrorMessage(error.response ? error.response.data.message : 'Error logging in');
       console.error('Login error:', error.response ? error.response.data : error.message);
     }
