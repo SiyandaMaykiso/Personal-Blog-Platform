@@ -1,8 +1,9 @@
 function isAuthenticated(req, res, next) {
-    if (req.session && req.session.user) {
-      return next(); // If session exists and user is set, proceed to the next middleware/function
+    if (req.session.user) {
+      next(); // If session exists and user is set, proceed to the next middleware/function
     } else {
-      res.status(401).send('You are not authorized to view this page');
+      // Respond with a JSON message instead of plain text
+      res.status(401).json({ message: 'You are not authorized to view this page' });
     }
   }
   
