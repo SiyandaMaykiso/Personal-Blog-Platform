@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import postsService from './postsService'; // Adjust the import path as necessary
+import postsService from './postsService'; // Ensure this is the correct path to your service
+import { useNavigate } from 'react-router-dom';
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
+  const navigate = useNavigate(); // For programmatically navigating
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,7 +17,7 @@ function PostsList() {
     };
 
     fetchPosts();
-  }, []); // No dependency on the token
+  }, []);
 
   const deletePost = async (postId) => {
     console.log(`Deleting post ${postId}`);
@@ -28,7 +30,9 @@ function PostsList() {
     }
   };
 
-  // Implement the editPost functionality here similarly, using postsService.editPost
+  const editPost = (postId) => {
+    navigate(`/edit-post/${postId}`); // Navigate to the edit page
+  };
 
   return (
     <div>
@@ -39,10 +43,8 @@ function PostsList() {
             <li key={post.id}>
               <h3>{post.title}</h3>
               <p>{post.content}</p>
-              {/* Adjust this logic based on how you check for user's ability to edit/delete posts */}
               <div>
-                {/* Placeholder for Edit button */}
-                <button onClick={() => console.log(`Edit post ${post.id}`)}>Edit</button>
+                <button onClick={() => editPost(post.id)}>Edit</button>
                 <button onClick={() => deletePost(post.id)}>Delete</button>
               </div>
             </li>

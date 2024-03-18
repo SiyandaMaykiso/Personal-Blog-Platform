@@ -4,7 +4,7 @@ import { useParams, useHistory } from 'react-router-dom'; // Import useHistory a
 
 function PostDetail() {
   const { id } = useParams(); // Get the post ID from the URL
-  const history = useHistory(); // Initialize useHistory to navigate after deletion
+  const history = useHistory(); // Initialize useHistory to navigate after deletion or editing
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
@@ -53,6 +53,11 @@ function PostDetail() {
     }
   };
 
+  // Navigate to the edit page for the post
+  const editPost = () => {
+    history.push(`/edit-post/${id}`);
+  };
+
   if (errorMessage) {
     return <p>{errorMessage}</p>;
   }
@@ -64,12 +69,13 @@ function PostDetail() {
           <h2>{post.title}</h2>
           <p>{post.content}</p>
           {/* Render author and date info if available */}
-          <button onClick={deletePost}>Delete Post</button> {/* Add the delete button */}
+          <button onClick={editPost}>Edit Post</button> {/* Add the edit button */}
+          <button onClick={deletePost}>Delete Post</button>
           <h3>Comments</h3>
           <ul>
             {comments.length ? (
               comments.map((comment) => (
-                <li key={comment.id}>{comment.text} {/* Render other comment details */}</li>
+                <li key={comment.id}>{comment.text}</li> // Fix: Remove the comment details placeholder
               ))
             ) : (
               <p>No comments found.</p>
