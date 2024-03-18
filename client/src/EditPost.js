@@ -9,7 +9,6 @@ function EditPost() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch the post data for editing
     const fetchPost = async () => {
       try {
         const response = await axios.get(`http://localhost:3001/posts/${id}`, {
@@ -18,6 +17,7 @@ function EditPost() {
         setTitle(response.data.title);
         setContent(response.data.content);
         setLoading(false); // Set loading to false after the data is loaded
+        console.log('Fetched post data:', response.data); // Log the fetched post data
       } catch (error) {
         console.error('Failed to fetch post data:', error);
         alert('Failed to fetch post data. Please try again.');
@@ -26,6 +26,8 @@ function EditPost() {
 
     fetchPost();
   }, [id]);
+
+  console.log('Title:', title, 'Content:', content); // Log the current title and content state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
