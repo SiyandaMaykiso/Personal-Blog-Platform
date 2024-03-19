@@ -28,3 +28,8 @@ npm install
 Usage
 
 After launching the application, navigate to http://localhost:3000 in your web browser. You can register a new user account or log in if you already have one. Once authenticated, you can start creating, viewing, editing, or deleting blog posts.
+
+Screenshot
+
+![Screenshot](https://github.com/SiyandaMaykiso/Personal-Blog-Platform/blob/main/client/public/desktop-screenshot.jpg?raw=true)
+
