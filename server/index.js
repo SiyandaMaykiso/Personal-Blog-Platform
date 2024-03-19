@@ -2,10 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session'); 
 const cors = require('cors');
+const path = require('path'); // Add this line
 const isAuthenticated = require('./middleware/isAuthenticated');
 const app = express();
 const PORT = process.env.PORT || 3001;
-
 
 const corsOptions = {
   origin: 'http://localhost:3000',
@@ -14,7 +14,6 @@ const corsOptions = {
 
 app.use(express.json());
 app.use(cors(corsOptions));
-
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -27,18 +26,20 @@ app.use(session({
   },
 }));
 
-
 const postsRoutes = require('./routes/postsRoutes');
 const authRoutes = require('./routes/authRoutes');
-
 
 app.use('/posts', isAuthenticated, postsRoutes);
 app.use('/auth', authRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/build')));
 
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'../client/build/index.html'));
+});
 
 app.use((err, req, res, next) => {
   console.error("Error status: ", err.status || 500);
