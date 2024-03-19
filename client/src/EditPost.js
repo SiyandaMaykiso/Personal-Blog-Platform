@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchPosts, updatePost } from './postsService'; // Ensure this path is correct
+import { fetchPosts, updatePost } from './postsService';
 
 function EditPost() {
     const { id } = useParams();
@@ -14,17 +14,17 @@ function EditPost() {
             setLoading(true);
             try {
                 const allPosts = await fetchPosts();
-                const postDetails = allPosts.find(post => post.id.toString() === id); // Ensure ID comparison works correctly
+                const postDetails = allPosts.find(post => post.id.toString() === id);
                 if (postDetails) {
                     setTitle(postDetails.title);
                     setContent(postDetails.content);
                 } else {
                     console.error("Post not found");
-                    navigate('/'); // Redirect if the post isn't found
+                    navigate('/');
                 }
             } catch (error) {
                 console.error("Failed to load post details:", error);
-                navigate('/'); // Redirect to home if fetching fails
+                navigate('/');
             } finally {
                 setLoading(false);
             }
@@ -39,7 +39,7 @@ function EditPost() {
 
         try {
             await updatePost(id, { title, content });
-            navigate(`/posts/${id}`); // Adjusted redirect to match likely route
+            navigate(`/posts/${id}`);
         } catch (error) {
             console.error("Failed to update the post:", error);
         } finally {

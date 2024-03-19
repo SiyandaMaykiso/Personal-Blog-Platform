@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Adjust if your API's base URL is different
+
 const baseUrl = 'http://localhost:3001/posts';
 
 export const fetchPosts = async () => {

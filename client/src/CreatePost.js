@@ -4,7 +4,7 @@ import axios from 'axios';
 function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,7 +13,7 @@ function CreatePost() {
       return;
     }
 
-    setIsLoading(true); // Indicate loading state
+    setIsLoading(true);
 
     try {
       const response = await axios.post('http://localhost:3001/posts', { title, content }, {
@@ -21,13 +21,13 @@ function CreatePost() {
       });
       console.log('Post created:', response.data);
       alert('Post created successfully!');
-      setTitle(''); // Clear title
-      setContent(''); // Clear content
+      setTitle('');
+      setContent('');
     } catch (error) {
       console.error('Failed to create post:', error);
       alert('Failed to create the post. Please try again.');
     } finally {
-      setIsLoading(false); // Reset loading state regardless of outcome
+      setIsLoading(false);
     }
   };
 

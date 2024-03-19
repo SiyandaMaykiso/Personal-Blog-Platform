@@ -13,13 +13,13 @@ const Login = ({ onLogin }) => {
         username,
         password,
       }, {
-        withCredentials: true // Ensure cookies are included with the request
+        withCredentials: true
       });
 
       if (response.data.user) {
-        onLogin(response.data.user); // Update parent component state or perform further actions
+        onLogin(response.data.user);
         console.log('Login successful:', response.data.message);
-        setErrorMessage(''); // Clear any error messages
+        setErrorMessage('');
       } else {
         setErrorMessage('Login failed: No user data returned.');
       }
@@ -45,7 +45,7 @@ const Login = ({ onLogin }) => {
           autoComplete="username"
         />
         <input
-          id="login-password" // Updated ID for uniqueness
+          id="login-password"
           name="password"
           type="password"
           placeholder="Password"

@@ -8,14 +8,14 @@
 }
 
 .App-header {
-  background-color: #f8f9fa; /* Light gray for a subtle header background */
+  background-color: #f8f9fa;
   padding: 20px 0;
-  margin-bottom: 40px; /* Space between header and content */
+  margin-bottom: 40px;
 }
 
 .App-title {
   font-size: 2rem;
-  color: #007bff; /* A touch of color */
+  color: #007bff; 
 }
 
 .App-content {
@@ -23,19 +23,19 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #333; /* Darker text for headings */
+  color: #333;
 }
 
 a {
   color: #007bff;
-  text-decoration: none; /* Style links to match your color scheme */
+  text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
 }
 
-/* Form styling */
+
 form {
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@ button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-/* Enhancing the post list presentation */
+
 .post-item {
   background-color: #fff;
   border-radius: 5px;
@@ -85,7 +85,7 @@ button[type="submit"]:hover {
   color: #333;
 }
 
-/* Footer styling */
+
 footer {
   text-align: center;
   padding: 20px;

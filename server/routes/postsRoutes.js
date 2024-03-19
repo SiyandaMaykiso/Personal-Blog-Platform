@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const isAuthenticated = require('../middleware/isAuthenticated');
-const pool = require('../db'); // Assuming you have a db.js that exports a Pool instance
+const pool = require('../db');
 
-// Fetch all posts
+
 router.get('/', isAuthenticated, async (req, res) => {
     try {
         const { rows } = await pool.query('SELECT * FROM posts');
@@ -14,7 +14,7 @@ router.get('/', isAuthenticated, async (req, res) => {
     }
 });
 
-// Fetch a single post by id
+
 router.get('/:id', isAuthenticated, async (req, res) => {
     try {
         const { id } = req.params;
@@ -30,10 +30,10 @@ router.get('/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// Create a new post
+
 router.post('/', isAuthenticated, async (req, res) => {
     const { title, content } = req.body;
-    const authorId = req.session.user.userId; // Assuming session contains user ID
+    const authorId = req.session.user.userId;
     try {
         const { rows } = await pool.query(
             'INSERT INTO posts (title, content, authorId) VALUES ($1, $2, $3) RETURNING *',
@@ -46,7 +46,7 @@ router.post('/', isAuthenticated, async (req, res) => {
     }
 });
 
-// Update a post
+
 router.put('/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
@@ -66,7 +66,7 @@ router.put('/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// Delete a post
+
 router.delete('/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
     try {

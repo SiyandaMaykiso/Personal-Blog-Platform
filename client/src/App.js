@@ -74,7 +74,7 @@ function App() {
             <Route path="/" element={<PostsList />} />
             <Route path="/create-post" element={user ? <CreatePost /> : <Login onLogin={handleUserLogin} />} />
             <Route path="/edit-post/:id" element={user ? <EditPost /> : <Login onLogin={handleUserLogin} />} />
-            {/* Optionally, add routes for login and registration if not rendered directly */}
+            
           </Routes>
         </main>
       </div>

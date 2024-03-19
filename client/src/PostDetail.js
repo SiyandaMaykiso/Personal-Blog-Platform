@@ -24,7 +24,7 @@ function PostDetail() {
         setComments(commentsResponse.data);
       } catch (error) {
         console.error("Failed to fetch comments:", error);
-        // Only update error message if no post details were fetched to avoid overwriting more critical error messages
+     
         if (!post) {
           setErrorMessage('Failed to fetch comments');
         }
@@ -32,7 +32,7 @@ function PostDetail() {
     };
 
     fetchPostDetails();
-  }, [id]); // Re-fetch if ID changes
+  }, [id]);
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this post?')) {
