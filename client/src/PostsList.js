@@ -1,55 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import postsService from './postsService'; // Ensure this is the correct path to your service
 import { useNavigate } from 'react-router-dom';
+import { fetchPosts, deletePost } from './postsService'; // Corrected imports
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
-  const navigate = useNavigate(); // For programmatically navigating
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    // Directly call fetchPosts without referencing postsService
+    const loadPosts = async () => {
       try {
-        const fetchedPosts = await postsService.fetchPosts();
+        const fetchedPosts = await fetchPosts();
         setPosts(fetchedPosts);
       } catch (error) {
         console.error("Failed to fetch posts:", error);
       }
     };
 
-    fetchPosts();
+    loadPosts();
   }, []);
 
-  const deletePost = async (postId) => {
-    console.log(`Deleting post ${postId}`);
+  const handleDeletePost = async (postId) => {
     try {
-      await postsService.deletePost(postId);
-      setPosts(currentPosts => currentPosts.filter(post => post.id !== postId));
-      console.log("Post deleted successfully");
+      // Directly call deletePost without referencing postsService
+      await deletePost(postId);
+      // Update the state to reflect the deletion
+      setPosts(posts.filter(post => post.id !== postId));
     } catch (error) {
       console.error("Failed to delete post:", error);
     }
   };
 
-  const editPost = (postId) => {
-    navigate(`/edit-post/${postId}`); // Navigate to the edit page
+  const handleEditPost = (postId) => {
+    navigate(`/edit-post/${postId}`);
   };
 
   return (
     <div>
       <h2>Posts</h2>
       {posts.length > 0 ? (
-        <ul>
-          {posts.map((post) => (
-            <li key={post.id}>
-              <h3>{post.title}</h3>
-              <p>{post.content}</p>
-              <div>
-                <button onClick={() => editPost(post.id)}>Edit</button>
-                <button onClick={() => deletePost(post.id)}>Delete</button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        posts.map(post => (
+          <div key={post.id}>
+            <h3>{post.title}</h3>
+            <p>{post.content}</p>
+            <button onClick={() => handleEditPost(post.id)}>Edit</button>
+            <button onClick={() => handleDeletePost(post.id)}>Delete</button>
+          </div>
+        ))
       ) : (
         <p>No posts found.</p>
       )}

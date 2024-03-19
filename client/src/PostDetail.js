@@ -1,51 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useHistory } from 'react-router-dom'; // Import useHistory along with useParams
+import { useParams, useNavigate } from 'react-router-dom';
 
 function PostDetail() {
-  const { id } = useParams(); // Get the post ID from the URL
-  const history = useHistory(); // Initialize useHistory to navigate after deletion or editing
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchPostDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/posts/${id}`, {
-          withCredentials: true // Use session-based authentication instead of JWT
-        });
-        setPost(response.data);
+        const postResponse = await axios.get(`http://localhost:3001/posts/${id}`, { withCredentials: true });
+        setPost(postResponse.data);
       } catch (error) {
         console.error("Failed to fetch post:", error);
-        setErrorMessage('Failed to fetch post');
+        setErrorMessage('Failed to fetch post details');
       }
-    };
 
-    const fetchComments = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/posts/${id}/comments`, {
-          withCredentials: true // Use session-based authentication instead of JWT
-        });
-        setComments(response.data);
+        const commentsResponse = await axios.get(`http://localhost:3001/posts/${id}/comments`, { withCredentials: true });
+        setComments(commentsResponse.data);
       } catch (error) {
         console.error("Failed to fetch comments:", error);
-        setErrorMessage('Failed to fetch comments');
+        // Only update error message if no post details were fetched to avoid overwriting more critical error messages
+        if (!post) {
+          setErrorMessage('Failed to fetch comments');
+        }
       }
     };
 
-    fetchPost();
-    fetchComments();
-  }, [id]); // Refetch when the post ID changes
+    fetchPostDetails();
+  }, [id]); // Re-fetch if ID changes
 
-  const deletePost = async () => {
+  const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        await axios.delete(`http://localhost:3001/posts/${id}`, {
-          withCredentials: true
-        });
+        await axios.delete(`http://localhost:3001/posts/${id}`, { withCredentials: true });
         alert('Post deleted successfully');
-        history.push('/'); // Redirect to the home page or wherever you list posts
+        navigate('/');
       } catch (error) {
         console.error("Failed to delete post:", error);
         alert('Failed to delete the post. Please try again.');
@@ -53,37 +47,29 @@ function PostDetail() {
     }
   };
 
-  // Navigate to the edit page for the post
-  const editPost = () => {
-    history.push(`/edit-post/${id}`);
-  };
-
-  if (errorMessage) {
-    return <p>{errorMessage}</p>;
-  }
-
   return (
     <div>
-      {post ? (
-        <div>
-          <h2>{post.title}</h2>
-          <p>{post.content}</p>
-          {/* Render author and date info if available */}
-          <button onClick={editPost}>Edit Post</button> {/* Add the edit button */}
-          <button onClick={deletePost}>Delete Post</button>
-          <h3>Comments</h3>
-          <ul>
-            {comments.length ? (
-              comments.map((comment) => (
-                <li key={comment.id}>{comment.text}</li> // Fix: Remove the comment details placeholder
-              ))
-            ) : (
-              <p>No comments found.</p>
-            )}
-          </ul>
-        </div>
+      {errorMessage ? (
+        <p>{errorMessage}</p>
       ) : (
-        <p>Loading post details...</p>
+        post && (
+          <div>
+            <h2>{post.title}</h2>
+            <p>{post.content}</p>
+            <button onClick={() => navigate(`/edit-post/${id}`)}>Edit Post</button>
+            <button onClick={handleDelete}>Delete Post</button>
+            {comments.length > 0 && (
+              <>
+                <h3>Comments</h3>
+                <ul>
+                  {comments.map(comment => (
+                    <li key={comment.id}>{comment.text}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        )
       )}
     </div>
   );

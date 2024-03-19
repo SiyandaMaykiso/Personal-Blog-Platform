@@ -1,30 +1,23 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/posts'; // Adjust if your API's base URL is different
+// Adjust if your API's base URL is different
+const baseUrl = 'http://localhost:3001/posts';
 
-// Fetch all posts
-const fetchPosts = async () => {
+export const fetchPosts = async () => {
   const response = await axios.get(baseUrl, { withCredentials: true });
   return response.data;
 };
 
-// Add a new post
-const createPost = async (postData) => {
+export const createPost = async (postData) => {
   const response = await axios.post(baseUrl, postData, { withCredentials: true });
   return response.data;
 };
 
-// Update a post by ID
-const editPost = async (id, postData) => {
+export const updatePost = async (id, postData) => {
   const response = await axios.put(`${baseUrl}/${id}`, postData, { withCredentials: true });
   return response.data;
 };
 
-// Delete a post by ID
-const deletePost = async (id) => {
+export const deletePost = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, { withCredentials: true });
 };
-
-const postsService = { fetchPosts, createPost, editPost, deletePost };
-
-export default postsService;

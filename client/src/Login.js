@@ -16,17 +16,14 @@ const Login = ({ onLogin }) => {
         withCredentials: true // Ensure cookies are included with the request
       });
 
-      // Assuming the server sends back user data on successful login
       if (response.data.user) {
         onLogin(response.data.user); // Update parent component state or perform further actions
         console.log('Login successful:', response.data.message);
         setErrorMessage(''); // Clear any error messages
       } else {
-        // Handle cases where login is successful but no user data is returned
         setErrorMessage('Login failed: No user data returned.');
       }
     } catch (error) {
-      // Handle login errors
       setErrorMessage(error.response ? error.response.data.message : 'Error logging in');
       console.error('Login error:', error.response ? error.response.data : error.message);
     }
@@ -48,7 +45,7 @@ const Login = ({ onLogin }) => {
           autoComplete="username"
         />
         <input
-          id="password"
+          id="login-password" // Updated ID for uniqueness
           name="password"
           type="password"
           placeholder="Password"

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Correct imports for v6
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PostsList from './PostsList';
 import CreatePost from './CreatePost';
 import Login from './Login';
 import Registration from './Registration';
-import EditPost from './EditPost'; // Ensure EditPost is correctly imported
+import EditPost from './EditPost';
 import './App.css';
 
 function App() {
@@ -22,6 +22,7 @@ function App() {
         }
       } catch (error) {
         console.log('Session check failed:', error);
+        setUser(null);
       }
     };
 
@@ -52,7 +53,15 @@ function App() {
         <header className="App-header">
           <h1>Personal Blog Platform</h1>
           {user ? (
-            <button onClick={handleLogout}>Logout</button>
+            <>
+              <button onClick={handleLogout}>Logout</button>
+              <nav>
+                <ul>
+                  <li><a href="/create-post">Create Post</a></li>
+                  <li><a href="/">View Posts</a></li>
+                </ul>
+              </nav>
+            </>
           ) : (
             <>
               <Login onLogin={handleUserLogin} />
@@ -63,13 +72,9 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<PostsList />} />
-            {user && (
-              <>
-                <Route path="/create-post" element={<CreatePost />} />
-                <Route path="/edit-post/:id" element={<EditPost />} />
-              </>
-            )}
-            {/* Optionally, handle unauthenticated routes or redirects */}
+            <Route path="/create-post" element={user ? <CreatePost /> : <Login onLogin={handleUserLogin} />} />
+            <Route path="/edit-post/:id" element={user ? <EditPost /> : <Login onLogin={handleUserLogin} />} />
+            {/* Optionally, add routes for login and registration if not rendered directly */}
           </Routes>
         </main>
       </div>
