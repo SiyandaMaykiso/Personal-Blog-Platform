@@ -18,6 +18,10 @@ Node.js
 PostgreSQL
 npm
 
+Deployed App
+
+https://personal-blog-platform-a11db04dd963.herokuapp.com/
+
 Installation
 
 Clone the repository:
