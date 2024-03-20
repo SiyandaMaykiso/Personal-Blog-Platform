@@ -33,13 +33,13 @@ app.use('/posts', isAuthenticated, postsRoutes);
 app.use('/auth', authRoutes);
 
 
-app.use(express.static(path.join(__dirname, '../client/build')));
-
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'../client/build/index.html'));
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
+
 
 app.use((err, req, res, next) => {
   console.error("Error status: ", err.status || 500);
