@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from './services/axiosConfig';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function CreatePost() {

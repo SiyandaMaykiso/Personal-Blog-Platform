@@ -4,7 +4,7 @@ const router = express.Router();
 const pool = require('../db');
 require('dotenv').config();
 
-
+// Register a new user
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   const saltRounds = 10;
@@ -15,33 +15,28 @@ router.post('/register', async (req, res) => {
       'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
       [username, email, hashedPassword]
     );
-
-   
     const { password: _, ...userWithoutPassword } = newUser.rows[0];
     res.status(201).json({ message: "User registered successfully", user: userWithoutPassword });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: "Server error during registration" });
+    console.error("Error during registration:", error.message);
+    res.status(500).json({ message: "Server error during registration", error: error.message });
   }
 });
 
-
+// User login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
     const userQuery = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
     if (userQuery.rows.length === 0) {
-      return res.status(401).json({ message: "Login failed: User not found" });
+      return res.status(404).json({ message: "Login failed: User not found" });
     }
 
     const user = userQuery.rows[0];
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
-      
       req.session.user = { userId: user.id, username: user.username };
-      
-      
       const { password: _, ...userWithoutPassword } = user;
       res.json({ message: "Login successful", user: userWithoutPassword });
     } else {
@@ -49,14 +44,15 @@ router.post('/login', async (req, res) => {
     }
   } catch (error) {
     console.error("Server error during login:", error.message);
-    res.status(500).json({ message: "Server error during login" });
+    res.status(500).json({ message: "Server error during login", error: error.message });
   }
 });
 
-
+// User logout
 router.post('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {
+      console.error("Error during logout:", err);
       return res.status(500).json({ message: "Could not log out, please try again" });
     }
     res.clearCookie('connect.sid');
@@ -64,16 +60,16 @@ router.post('/logout', (req, res) => {
   });
 });
 
-
+// Middleware to check if the user is authenticated
 const isAuthenticated = (req, res, next) => {
   if (req.session && req.session.user) {
     next();
   } else {
-    res.status(401).json({ message: "Unauthorized" });
+    res.status(401).json({ message: "Unauthorized access" });
   }
 };
 
-
+// Check session status
 router.get('/session', (req, res) => {
   if (req.session && req.session.user) {
     res.json({ isLoggedIn: true, user: req.session.user });
@@ -82,9 +78,9 @@ router.get('/session', (req, res) => {
   }
 });
 
-
+// Example protected route
 router.get('/protected', isAuthenticated, (req, res) => {
-  res.json({ message: "This is a protected route.", user: req.session.user });
+  res.json({ message: "Access to protected route granted", user: req.session.user });
 });
 
 module.exports = router;
