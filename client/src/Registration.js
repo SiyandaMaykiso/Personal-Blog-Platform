@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from './services/axiosConfig';  // Assuming axiosConfig is in the services folder
 
 const Registration = ({ onRegistration }) => {
   const [username, setUsername] = useState('');
@@ -11,8 +11,7 @@ const Registration = ({ onRegistration }) => {
     e.preventDefault();
 
     try {
-      // Hardcoded URL pointing to the Heroku-hosted backend
-      const response = await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/register', {
+      const response = await axios.post('/auth/register', {
         username,
         email,
         password,
@@ -21,8 +20,9 @@ const Registration = ({ onRegistration }) => {
       console.log('User registered:', response.data);
       setErrorMessage('');
 
-      if (onRegistration) {
-        onRegistration(response.data);
+      // Assuming the onRegistration callback expects JWT token and user info
+      if (onRegistration && response.data.token) {
+        onRegistration(response.data.token, response.data.user);
       }
 
     } catch (error) {
