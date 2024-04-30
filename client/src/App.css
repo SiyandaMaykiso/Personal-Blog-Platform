@@ -104,16 +104,30 @@ footer {
   padding: 20px;
 }
 
-.authentication-container {
+.auth-container {
   display: flex;
-  justify-content: space-around;
-  width: 100%;
+  justify-content: space-around; /* Ensure there's space between the forms */
+  width: 100%; /* Utilizes full width of the parent container */
+  max-width: 1200px; /* Adjust this value based on your design needs */
+  margin: auto; /* Centers the container */
 }
 
 .login, .registration {
-  flex: 1;
+  flex: 1; /* Each section takes equal space */
   margin: 10px;
-  padding: 20px;
+  padding: 30px; /* Increased padding for better visual spacing */
   border: 1px solid #ccc;
   border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Optional: adds shadow for depth */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .login, .registration {
+    width: 100%; /* Full width on smaller screens */
+  }
 }
