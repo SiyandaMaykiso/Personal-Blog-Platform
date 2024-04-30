@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchPosts, updatePost } from './postsService';
+import { fetchPost, updatePost } from './postsService';  // Assuming fetchPost is available for fetching single post
 
 function EditPost() {
     const { id } = useParams();
@@ -13,18 +13,17 @@ function EditPost() {
         const fetchPostDetails = async () => {
             setLoading(true);
             try {
-                const allPosts = await fetchPosts();
-                const postDetails = allPosts.find(post => post.id.toString() === id);
+                const postDetails = await fetchPost(id);  // Fetch single post detail
                 if (postDetails) {
                     setTitle(postDetails.title);
                     setContent(postDetails.content);
                 } else {
                     console.error("Post not found");
-                    navigate('/');
+                    navigate('/post-list');  // Redirect to the list if post is not found
                 }
             } catch (error) {
                 console.error("Failed to load post details:", error);
-                navigate('/');
+                navigate('/post-list');  // Redirect on error
             } finally {
                 setLoading(false);
             }
@@ -39,7 +38,7 @@ function EditPost() {
 
         try {
             await updatePost(id, { title, content });
-            navigate(`/posts/${id}`);
+            navigate(`/posts/${id}`);  // Navigate to post details page after update
         } catch (error) {
             console.error("Failed to update the post:", error);
         } finally {
