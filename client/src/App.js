@@ -66,7 +66,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
-            <Route path="/posts" element={<PostsList />} />
+            <Route path="/post-list" element={<PostsList />} />
             <Route path="/create-post" element={user ? <CreatePost /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
             <Route path="/edit-post/:id" element={user ? <EditPost /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
           </Routes>
