@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from './axiosConfig'; // Use your configured Axios instance that handles headers
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './Home';
 import PostsList from './PostsList';
@@ -9,42 +9,38 @@ import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('jwtToken'));
 
   useEffect(() => {
-    // Check if the user is logged in when the app loads
-    const checkSession = async () => {
-      try {
-        const response = await axios.get('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/session', { withCredentials: true });
-        if (response.data.isLoggedIn) {
-          setUser(response.data.user);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.log('Session check failed:', error);
-        setUser(null);
-      }
-    };
+    if (token) {
+      // Configure Axios to use the token
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      // Dummy API call to check session or decode the token to fetch user data
+      // For demonstration, assuming we decode token client-side
+      // Ideally, you should call an API that validates the token and returns user data
+      axios.get('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/session')
+        .then(response => setUser(response.data.user))
+        .catch(error => console.log('Session check failed:', error));
+    }
+  }, [token]);
 
-    checkSession();
-  }, []);
-
-  const handleUserLogin = (userData) => {
-    setUser(userData);
+  const handleUserLogin = (authData) => {
+    localStorage.setItem('jwtToken', authData.token);
+    setToken(authData.token);
+    setUser(authData.user);
   };
 
-  const handleUserRegistration = (userData) => {
-    setUser(userData);
+  const handleUserRegistration = (authData) => {
+    localStorage.setItem('jwtToken', authData.token);
+    setToken(authData.token);
+    setUser(authData.user);
   };
 
   const handleLogout = async () => {
-    try {
-      await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/logout', {}, { withCredentials: true });
-      setUser(null);
-      console.log("Logged out successfully");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+    localStorage.removeItem('jwtToken');
+    setToken(null);
+    setUser(null);
+    // Logout endpoint may no longer be necessary with JWT unless you maintain a token blacklist server-side
   };
 
   return (

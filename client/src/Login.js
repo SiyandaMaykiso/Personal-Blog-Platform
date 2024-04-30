@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from './services/axiosConfig';  // Make sure to import your configured Axios instance
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -9,16 +9,14 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Update API URL to point to the Heroku-hosted backend
-      const response = await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/login', {
+      const response = await axios.post('/auth/login', {
         username,
-        password,
-      }, {
-        withCredentials: true
+        password
       });
 
-      if (response.data.user) {
-        onLogin(response.data.user);
+      if (response.data.token) {
+        localStorage.setItem('jwtToken', response.data.token);  // Store the token in local storage
+        onLogin(response.data.user);  // Update the user state in your app
         console.log('Login successful:', response.data.message);
         setErrorMessage('');
       } else {
