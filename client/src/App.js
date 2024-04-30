@@ -50,30 +50,25 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
-          <h1>Personal Blog Platform</h1>
-          {user ? (
-            <>
-              <button onClick={handleLogout}>Logout</button>
-              <nav>
-                <ul>
-                  <li><a href="/create-post">Create Post</a></li>
-                  <li><a href="/posts">View Posts</a></li>
-                </ul>
-              </nav>
-            </>
-          ) : (
-            null // Remove the redundant Home component from the header
-          )}
-        </header>
-        <main>
-          <Routes>
-            <Route path="/" element={<Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
-            <Route path="/posts" element={<PostsList />} />
-            <Route path="/create-post" element={user ? <CreatePost /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
-            <Route path="/edit-post/:id" element={user ? <EditPost /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
-          </Routes>
-        </main>
+        {user ? (
+          <div>
+            <button onClick={() => setUser(null)}>Logout</button>
+            <nav>
+              <ul>
+                <li><a href="/create-post">Create Post</a></li>
+                <li><a href="/posts">View Posts</a></li>
+              </ul>
+            </nav>
+          </div>
+        ) : (
+          <Home onLogin={(userData) => setUser(userData)} onRegistration={(userData) => setUser(userData)} />
+        )}
+        <Routes>
+          <Route path="/" element={<Home onLogin={(userData) => setUser(userData)} onRegistration={(userData) => setUser(userData)} />} />
+          <Route path="/posts" element={<PostsList />} />
+          <Route path="/create-post" element={user ? <CreatePost /> : <Home onLogin={(userData) => setUser(userData)} onRegistration={(userData) => setUser(userData)} />} />
+          <Route path="/edit-post/:id" element={user ? <EditPost /> : <Home onLogin={(userData) => setUser(userData)} onRegistration={(userData) => setUser(userData)} />} />
+        </Routes>
       </div>
     </Router>
   );
