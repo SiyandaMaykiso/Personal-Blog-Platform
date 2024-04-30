@@ -6,14 +6,16 @@ import { useNavigate } from 'react-router-dom';
 function Home({ onLogin, onRegistration }) {
   const navigate = useNavigate();
 
-  const handleLogin = (userData) => {
-    onLogin(userData); // Perform login
-    navigate('/create-post'); // Navigate to create post page
+  const handleLogin = (userData, token) => {
+    localStorage.setItem('jwtToken', token);  // Store the token
+    onLogin(userData);  // Update app state
+    navigate('/post-list');  // Redirect user to post list
   };
 
-  const handleRegistration = (userData) => {
-    onRegistration(userData); // Perform registration
-    navigate('/create-post'); // Navigate to create post page
+  const handleRegistration = (userData, token) => {
+    localStorage.setItem('jwtToken', token);  // Store the token
+    onRegistration(userData);  // Update app state
+    navigate('/post-list');  // Redirect user to post list
   };
 
   return (
