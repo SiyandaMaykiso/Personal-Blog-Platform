@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import axios from './services/axiosConfig';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axios from './services/axiosConfig'; // Ensure axios is configured to automatically handle JWT
+import { useNavigate } from 'react-router-dom';
 
 function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,14 +18,12 @@ function CreatePost() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/posts', { title, content }, {
-        withCredentials: true
-      });
+      const response = await axios.post('/posts', { title, content });
       console.log('Post created:', response.data);
       alert('Post created successfully!');
       setTitle('');
       setContent('');
-      navigate('/posts'); // Navigate to posts page after successful creation
+      navigate('/post-list'); // Navigate to posts list page after successful creation
     } catch (error) {
       console.error('Failed to create post:', error);
       alert('Failed to create the post. Please try again.');
@@ -38,8 +36,6 @@ function CreatePost() {
   const handleViewPosts = () => {
     navigate('/post-list');
   };
-
-  // Optionally, add more navigation functions if there are other specific pages to navigate to
 
   return (
     <div>
@@ -69,7 +65,7 @@ function CreatePost() {
           {isLoading ? 'Creating...' : 'Submit Post'}
         </button>
       </form>
-      <button onClick={handleViewPosts}>View Posts</button> {/* Navigation button */}
+      <button onClick={handleViewPosts}>View Posts</button>
     </div>
   );
 }
