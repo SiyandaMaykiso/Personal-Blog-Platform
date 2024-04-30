@@ -11,6 +11,7 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Check if the user is logged in when the app loads
     const checkSession = async () => {
       try {
         const response = await axios.get('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/session', { withCredentials: true });
@@ -62,7 +63,7 @@ function App() {
               </nav>
             </>
           ) : (
-            <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />
+            null // Remove the redundant Home component from the header
           )}
         </header>
         <main>
