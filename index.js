@@ -1,40 +1,27 @@
 require('dotenv').config();
 const express = require('express');
-const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
 const compression = require('compression');
-const isAuthenticated = require('./middleware/isAuthenticated');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 // CORS options to dynamically handle development and production environments
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' ? 'https://personal-blog-platform-a11db04dd963.herokuapp.com' : 'http://localhost:3000',
-  credentials: true,
+  credentials: true, // Must be true to accept cookies via AJAX requests
 };
 
 app.use(express.json());
 app.use(cors(corsOptions));
-app.use(helmet());  // Set security-related HTTP headers
-app.use(compression());  // Compress all routes
-
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',  // Ensures cookies are sent over HTTPS in production
-    httpOnly: true,  // Prevents client-side JS from reading the cookie
-    sameSite: 'strict',  // Enhanced CSRF protection
-  },
-}));
+app.use(helmet()); // Set security-related HTTP headers
+app.use(compression()); // Compress all routes
 
 const postsRoutes = require('./routes/postsRoutes');
 const authRoutes = require('./routes/authRoutes');
 
-app.use('/posts', isAuthenticated, postsRoutes);
+app.use('/posts', postsRoutes); // Assume JWT authentication is handled in the routes themselves
 app.use('/auth', authRoutes);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
