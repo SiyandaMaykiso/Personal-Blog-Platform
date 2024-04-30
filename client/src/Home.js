@@ -18,10 +18,14 @@ function Home({ onLogin, onRegistration }) {
 
   return (
     <div className="home-container">
-      <h1>Welcome to Personal Blog Platform</h1>
+      <h1>Welcome to the Personal Blog Platform</h1>
       <div className="auth-container">
-        <Login onLogin={handleLogin} />
-        <Registration onRegistration={handleRegistration} />
+        <div className="login">
+          <Login onLogin={handleLogin} />
+        </div>
+        <div className="registration">
+          <Registration onRegistration={handleRegistration} />
+        </div>
       </div>
     </div>
   );
