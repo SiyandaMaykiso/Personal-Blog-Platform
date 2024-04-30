@@ -9,7 +9,8 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/auth/login', {
+      // Update API URL to point to the Heroku-hosted backend
+      const response = await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/login', {
         username,
         password,
       }, {

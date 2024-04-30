@@ -2,36 +2,30 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Registration = ({ onRegistration }) => {
-
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-   
-      const response = await axios.post('http://localhost:3001/auth/register', {
+      // Hardcoded URL pointing to the Heroku-hosted backend
+      const response = await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/register', {
         username,
         email,
         password,
       });
 
-  
       console.log('User registered:', response.data);
       setErrorMessage('');
 
-    
       if (onRegistration) {
         onRegistration(response.data);
       }
 
-  
     } catch (error) {
-  
       console.error('Error', error.response ? error.response.data : error.message);
       setErrorMessage(error.response ? error.response.data.message : 'Error registering user');
     }

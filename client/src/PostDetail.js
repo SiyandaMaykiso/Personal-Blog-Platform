@@ -12,7 +12,8 @@ function PostDetail() {
   useEffect(() => {
     const fetchPostDetails = async () => {
       try {
-        const postResponse = await axios.get(`http://localhost:3001/posts/${id}`, { withCredentials: true });
+        // Update API URL to point to Heroku-hosted backend
+        const postResponse = await axios.get(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, { withCredentials: true });
         setPost(postResponse.data);
       } catch (error) {
         console.error("Failed to fetch post:", error);
@@ -20,11 +21,11 @@ function PostDetail() {
       }
 
       try {
-        const commentsResponse = await axios.get(`http://localhost:3001/posts/${id}/comments`, { withCredentials: true });
+        // Update API URL to point to Heroku-hosted backend for comments
+        const commentsResponse = await axios.get(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}/comments`, { withCredentials: true });
         setComments(commentsResponse.data);
       } catch (error) {
         console.error("Failed to fetch comments:", error);
-     
         if (!post) {
           setErrorMessage('Failed to fetch comments');
         }
@@ -37,7 +38,8 @@ function PostDetail() {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        await axios.delete(`http://localhost:3001/posts/${id}`, { withCredentials: true });
+        // Update API URL to point to Heroku-hosted backend for deleting posts
+        await axios.delete(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, { withCredentials: true });
         alert('Post deleted successfully');
         navigate('/');
       } catch (error) {

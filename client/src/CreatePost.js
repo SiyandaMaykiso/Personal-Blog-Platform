@@ -16,7 +16,8 @@ function CreatePost() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3001/posts', { title, content }, {
+      // Update the API URL to point to your Heroku-hosted backend
+      const response = await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/posts', { title, content }, {
         withCredentials: true
       });
       console.log('Post created:', response.data);

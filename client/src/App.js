@@ -14,7 +14,8 @@ function App() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/auth/session', { withCredentials: true });
+        // Updated to use the Heroku URL
+        const response = await axios.get('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/session', { withCredentials: true });
         if (response.data.isLoggedIn) {
           setUser(response.data.user);
         } else {
@@ -39,7 +40,8 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:3001/auth/logout', {}, { withCredentials: true });
+      // Updated to use the Heroku URL
+      await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/logout', {}, { withCredentials: true });
       setUser(null);
       console.log("Logged out successfully");
     } catch (error) {
@@ -74,7 +76,6 @@ function App() {
             <Route path="/" element={<PostsList />} />
             <Route path="/create-post" element={user ? <CreatePost /> : <Login onLogin={handleUserLogin} />} />
             <Route path="/edit-post/:id" element={user ? <EditPost /> : <Login onLogin={handleUserLogin} />} />
-            
           </Routes>
         </main>
       </div>

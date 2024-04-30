@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-
-const baseUrl = 'http://localhost:3001/posts';
+// Hardcoded URL pointing to the Heroku-hosted backend
+const baseUrl = 'https://personal-blog-platform-a11db04dd963.herokuapp.com/posts';
 
 export const fetchPosts = async () => {
   const response = await axios.get(baseUrl, { withCredentials: true });
