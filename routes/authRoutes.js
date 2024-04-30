@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); // Import JWT library
 const router = express.Router();
 const pool = require('../db');
 require('dotenv').config();
@@ -12,11 +13,18 @@ router.post('/register', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const newUser = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email',
       [username, email, hashedPassword]
     );
-    const { password: _, ...userWithoutPassword } = newUser.rows[0];
-    res.status(201).json({ message: "User registered successfully", user: userWithoutPassword });
+
+    const user = newUser.rows[0];
+    const token = jwt.sign(
+      { userId: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.status(201).json({ message: "User registered successfully", user, token });
   } catch (error) {
     console.error("Error during registration:", error.message);
     res.status(500).json({ message: "Server error during registration", error: error.message });
@@ -36,9 +44,13 @@ router.post('/login', async (req, res) => {
     const user = userQuery.rows[0];
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
-      req.session.user = { userId: user.id, username: user.username };
-      const { password: _, ...userWithoutPassword } = user;
-      res.json({ message: "Login successful", user: userWithoutPassword });
+      const token = jwt.sign(
+        { userId: user.id, username: user.username },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+
+      res.json({ message: "Login successful", user: { userId: user.id, username: user.username }, token });
     } else {
       res.status(401).json({ message: "Login failed: Incorrect password" });
     }
@@ -50,37 +62,34 @@ router.post('/login', async (req, res) => {
 
 // User logout
 router.post('/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      console.error("Error during logout:", err);
-      return res.status(500).json({ message: "Could not log out, please try again" });
-    }
-    res.clearCookie('connect.sid');
-    res.json({ message: "Logged out successfully" });
-  });
+  // Logout for JWT is handled client-side by removing the token
+  res.json({ message: "Logged out successfully, please clear your token" });
 });
 
-// Middleware to check if the user is authenticated
+// Middleware to check if the user is authenticated using JWT
 const isAuthenticated = (req, res, next) => {
-  if (req.session && req.session.user) {
+  const token = req.headers.authorization?.split(' ')[1]; // Assume Bearer token
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized access - no token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
-  } else {
-    res.status(401).json({ message: "Unauthorized access" });
+  } catch (error) {
+    res.status(401).json({ message: "Unauthorized access - invalid token" });
   }
 };
 
-// Check session status
-router.get('/session', (req, res) => {
-  if (req.session && req.session.user) {
-    res.json({ isLoggedIn: true, user: req.session.user });
-  } else {
-    res.json({ isLoggedIn: false });
-  }
+// Check token validity
+router.get('/session', isAuthenticated, (req, res) => {
+  res.json({ isLoggedIn: true, user: req.user });
 });
 
 // Example protected route
 router.get('/protected', isAuthenticated, (req, res) => {
-  res.json({ message: "Access to protected route granted", user: req.session.user });
+  res.json({ message: "Access to protected route granted", user: req.user });
 });
 
 module.exports = router;
