@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchPosts, deletePost } from './postsService';
+import axios from './axiosConfig';  // Import custom axios instance
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-
     const loadPosts = async () => {
       try {
-        const fetchedPosts = await fetchPosts();
-        setPosts(fetchedPosts);
+        const response = await axios.get('/posts');  // Use custom axios instance
+        setPosts(response.data);
       } catch (error) {
         console.error("Failed to fetch posts:", error);
       }
@@ -22,9 +21,7 @@ function PostsList() {
 
   const handleDeletePost = async (postId) => {
     try {
- 
-      await deletePost(postId);
-    
+      await axios.delete(`/posts/${postId}`);  // Use custom axios instance
       setPosts(posts.filter(post => post.id !== postId));
     } catch (error) {
       console.error("Failed to delete post:", error);
