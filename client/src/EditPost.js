@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchPost, updatePost } from './postsService';  // Assuming fetchPost is available for fetching single post
+import { fetchPost, updatePost } from './postsService'; // Assuming fetchPost is available for fetching single post
 
 function EditPost() {
     const { id } = useParams();

@@ -1,7 +1,7 @@
 import axios from './services/axiosConfig';  // Assuming axiosConfig.js is in the same directory
 
-export const fetchPosts = async () => {
-  const response = await axios.get('/posts');
+export const fetchPost = async (id) => {
+  const response = await axios.get(`/posts/${id}`);
   return response.data;
 };
 
