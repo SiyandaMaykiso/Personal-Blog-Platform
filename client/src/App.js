@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './Home'; // Import the new Home component
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './Home';
 import PostsList from './PostsList';
 import CreatePost from './CreatePost';
 import EditPost from './EditPost';
@@ -50,23 +50,13 @@ function App() {
   return (
     <Router>
       <div className="App">
-          {user ? (
-            <>
-              <button onClick={handleLogout}>Logout</button>
-              <nav>
-                <ul>
-                  <li><a href="/create-post">Create Post</a></li>
-                  <li><a href="/posts">View Posts</a></li>
-                </ul>
-              </nav>
-            </>
-          ) : (
-            null // Remove the redundant Home component from the header
-          )}
+        {user ? (
+          <button onClick={handleLogout}>Logout</button>
+        ) : null}
         <main>
           <Routes>
             <Route path="/" element={<Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
-            <Route path="/post-list" element={<PostsList />} />
+            <Route path="/post-list" element={user ? <PostsList /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
             <Route path="/create-post" element={user ? <CreatePost /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
             <Route path="/edit-post/:id" element={user ? <EditPost /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
           </Routes>
