@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from './axiosConfig';  // Import custom axios instance
+import axios from './services/axiosConfig';  // Import custom axios instance
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
