@@ -5,16 +5,10 @@ import Registration from './Registration';
 function Home({ onLogin, onRegistration }) {
   return (
     <div className="home-container">
-      <h1>Welcome to Personal Blog Platform</h1>
-      <div className="authentication-container">
-        <div className="login">
-          <h2>Login</h2>
-          <Login onLogin={onLogin} />
-        </div>
-        <div className="registration">
-          <h2>Register</h2>
-          <Registration onRegistration={onRegistration} />
-        </div>
+      <h1>Welcome to the Personal Blog Platform</h1>
+      <div className="auth-container">
+        <Login onLogin={onLogin} />
+        <Registration onRegistration={onRegistration} />
       </div>
     </div>
   );
