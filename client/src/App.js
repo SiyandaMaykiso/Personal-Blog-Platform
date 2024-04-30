@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './Home'; // Import the new Home component
 import PostsList from './PostsList';
 import CreatePost from './CreatePost';
-import Login from './Login';
-import Registration from './Registration';
 import EditPost from './EditPost';
 import './App.css';
 
@@ -14,7 +13,6 @@ function App() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        // Updated to use the Heroku URL
         const response = await axios.get('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/session', { withCredentials: true });
         if (response.data.isLoggedIn) {
           setUser(response.data.user);
@@ -40,7 +38,6 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      // Updated to use the Heroku URL
       await axios.post('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/logout', {}, { withCredentials: true });
       setUser(null);
       console.log("Logged out successfully");
@@ -60,22 +57,20 @@ function App() {
               <nav>
                 <ul>
                   <li><a href="/create-post">Create Post</a></li>
-                  <li><a href="/">View Posts</a></li>
+                  <li><a href="/posts">View Posts</a></li>
                 </ul>
               </nav>
             </>
           ) : (
-            <>
-              <Login onLogin={handleUserLogin} />
-              <Registration onRegistration={handleUserRegistration} />
-            </>
+            <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />
           )}
         </header>
         <main>
           <Routes>
-            <Route path="/" element={<PostsList />} />
-            <Route path="/create-post" element={user ? <CreatePost /> : <Login onLogin={handleUserLogin} />} />
-            <Route path="/edit-post/:id" element={user ? <EditPost /> : <Login onLogin={handleUserLogin} />} />
+            <Route path="/" element={<Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
+            <Route path="/posts" element={<PostsList />} />
+            <Route path="/create-post" element={user ? <CreatePost /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
+            <Route path="/edit-post/:id" element={user ? <EditPost /> : <Home onLogin={handleUserLogin} onRegistration={handleUserRegistration} />} />
           </Routes>
         </main>
       </div>
