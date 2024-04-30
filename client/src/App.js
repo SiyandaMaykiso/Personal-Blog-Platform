@@ -56,7 +56,7 @@ function App() {
               <nav>
                 <ul>
                   <li><a href="/create-post">Create Post</a></li>
-                  <li><a href="/posts">View Posts</a></li>
+                  <li><a href="/view-posts">View Posts</a></li>
                 </ul>
               </nav>
             </>
