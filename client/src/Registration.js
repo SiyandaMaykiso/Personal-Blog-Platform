@@ -15,7 +15,7 @@ function Registration() {
     e.preventDefault();
     try {
       await register(username, email, password);
-      navigate('/dashboard');  // Navigate to dashboard after successful registration
+      navigate('/post-list');  // Navigate to dashboard after successful registration
     } catch (error) {
       console.error('Registration error:', error);
       setRegistrationError(error.message || 'Failed to register. Please try again.');

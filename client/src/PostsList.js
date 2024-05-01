@@ -1,36 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from './services/axiosConfig';  // Import custom axios instance
+import { useAuth } from './contexts/AuthContext'; // Ensure the path is correct
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { authToken, loading: authLoading } = useAuth();
+
+  const fetchPosts = useCallback(async () => {
+    if (authLoading || !authToken) {
+      if (!authToken) navigate('/login');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch('https://personal-blog-platform-a11db04dd963.herokuapp.com/posts', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch posts');
+
+      const data = await response.json();
+      setPosts(data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      setError('Failed to load posts. Please refresh the page.');
+    } finally {
+      setLoading(false);
+    }
+  }, [authToken, authLoading, navigate]);
 
   useEffect(() => {
-    setLoading(true);
-    const loadPosts = async () => {
-      try {
-        const response = await axios.get('/posts');  // Use custom axios instance
-        setPosts(response.data);
-        setError(''); // Clear any previous errors
-      } catch (error) {
-        console.error("Failed to fetch posts:", error);
-        setError('Failed to load posts. Please refresh the page.');
-      } finally {
-        setLoading(false); // Ensure loading is set to false after fetch
-      }
-    };
-
-    loadPosts();
-  }, []);
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleDeletePost = async (postId) => {
     try {
-      await axios.delete(`/posts/${postId}`);  // Use custom axios instance
-      setPosts(posts.filter(post => post.id !== postId));
-      setError(''); // Clear any previous errors
+      const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${postId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to delete post');
+
+      setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
     } catch (error) {
       console.error("Failed to delete post:", error);
       setError('Failed to delete post. Please try again later.');
