@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from './services/axiosConfig';  // Make sure to import your configured Axios instance
+import { setToken } from './services/tokenService';  // Import setToken from tokenService
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -14,18 +15,13 @@ const Login = ({ onLogin }) => {
         password
       });
 
-      console.log("Login response:", response.data);  // Check what the server actually returns, including the token
+      console.log("Login response:", response.data);  // Check what the server actually returns
 
       if (response.data.token) {
-        localStorage.setItem('jwtToken', response.data.token);  // Store the token in local storage
-        console.log('Token set in local storage:', localStorage.getItem('jwtToken'));  // Log the token from local storage
-        
-        setTimeout(() => {  // Ensure async storage setting is complete before proceeding
-          onLogin(response.data.user);  // Update the user state in your app
-          console.log('Login successful:', response.data.message);
-          console.log('Token received:', response.data.token);  // Specifically log the token
-        }, 100); // Small timeout to ensure token is set
-        
+        setToken(response.data.token);  // Use setToken to handle token storage
+        console.log('Token received and stored:', response.data.token);
+        onLogin(response.data.user);  // Update the user state in your app
+        console.log('Login successful:', response.data.message);
         setErrorMessage('');
       } else {
         setErrorMessage('Login failed: No user data returned.');
