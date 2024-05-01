@@ -1,42 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import axios from './services/axiosConfig'; // Import custom axios instance
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext'; // Ensure the path is correct
 
-function PostDetail() {
+const PostDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [post, setPost] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const { authToken } = useAuth(); // Assuming AuthContext provides authToken
+  const [post, setPost] = useState({});
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchPostDetails = async () => {
+    async function fetchPostDetails() {
       try {
-        const postResponse = await axios.get(`/posts/${id}`);
-        setPost(postResponse.data);
-      } catch (error) {
-        console.error("Failed to fetch post:", error);
-        setErrorMessage('Failed to fetch post details');
-      }
+        const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+        });
+        if (!response.ok) throw new Error('Failed to fetch post details');
 
-      try {
-        const commentsResponse = await axios.get(`/posts/${id}/comments`);
-        setComments(commentsResponse.data);
+        const postData = await response.json();
+        setPost(postData);
       } catch (error) {
-        console.error("Failed to fetch comments:", error);
-        if (!post) {
-          setErrorMessage('Failed to fetch comments');
-        }
+        console.error("Error fetching post:", error);
+        setError(error.message);
       }
-    };
-
+    }
     fetchPostDetails();
-  }, [id]);
+  }, [id, authToken]);
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        await axios.delete(`/posts/${id}`);
+        const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+          },
+        });
+
+        if (!response.ok) throw new Error('Failed to delete post');
         alert('Post deleted successfully');
         navigate('/');
       } catch (error) {
@@ -46,30 +51,30 @@ function PostDetail() {
     }
   };
 
-  if (errorMessage) return <p>{errorMessage}</p>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
-      {post ? (
-        <div>
+    <div className="container post-detail-container" style={{ maxWidth: '800px', margin: 'auto' }}>
+      <div className="navigation-buttons">
+        <button onClick={() => navigate('/')} className="btn btn-secondary">Back to Posts</button>
+        <button onClick={() => navigate(`/edit-post/${id}`)} className="btn btn-primary">Edit Post</button>
+        <button onClick={handleDelete} className="btn btn-danger">Delete Post</button>
+      </div>
+      {post && (
+        <>
           <h2>{post.title}</h2>
-          <p>{post.content}</p>
-          <button onClick={() => navigate(`/edit-post/${id}`)}>Edit Post</button>
-          <button onClick={handleDelete}>Delete Post</button>
-          {comments.length > 0 && (
-            <>
-              <h3>Comments</h3>
-              <ul>
-                {comments.map(comment => (
-                  <li key={comment.id}>{comment.text}</li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
-      ) : <p>Loading...</p>}
+          <p style={{ marginTop: '10px', marginBottom: '20px' }}>{post.content}</p>
+          {/* Assuming you might want to add a comment section similar to recipes */}
+          <h3>Comments</h3>
+          <ul style={{ marginTop: '20px', listStyleType: 'none', paddingLeft: '0', marginBottom: '20px' }}>
+            {post.comments ? post.comments.map((comment, index) => (
+              <li key={index} style={{ marginBottom: '10px' }}>{comment.text}</li>
+            )) : <li>No comments found.</li>}
+          </ul>
+        </>
+      )}
     </div>
   );
-}
+};
 
 export default PostDetail;
