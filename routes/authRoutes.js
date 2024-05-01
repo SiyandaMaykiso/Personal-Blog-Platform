@@ -13,7 +13,7 @@ router.post('/register', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const newUser = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email',
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING user_id as id, username, email',
       [username, email, hashedPassword]
     );
 
@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const userQuery = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    const userQuery = await pool.query('SELECT user_id as id, username, password FROM users WHERE username = $1', [username]);
     if (userQuery.rows.length === 0) {
       return res.status(404).json({ message: "Login failed: User not found" });
     }
@@ -68,26 +68,23 @@ router.post('/logout', (req, res) => {
 // Middleware to check if the user is authenticated using JWT
 const isAuthenticated = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1]; // Split 'Bearer token'
-  console.log('Received token:', token);  // Log the received token
+  const token = authHeader && authHeader.split(' ')[1];
   if (!token) {
     return res.status(401).json({ message: "Unauthorized access - no token provided" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Token is valid, decoded payload:', decoded);  // Log the successful decoding
     req.user = decoded;
     next();
   } catch (error) {
-    console.error('Token verification failed:', error);  // Log the error if verification fails
+    console.error('Token verification failed:', error);
     res.status(401).json({ message: "Unauthorized access - invalid token" });
   }
 };
 
 // Check token validity
 router.get('/session', isAuthenticated, (req, res) => {
-  console.log('Token decoded successfully:', req.user);  // Log the decoded user information
   res.json({ isLoggedIn: true, user: req.user });
 });
 
