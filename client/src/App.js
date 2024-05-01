@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from './services/axiosConfig';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { setToken, getToken, removeToken } from './tokenService'; // Import token utilities
+import { setToken, getToken, removeToken } from './services/tokenService'; // Import token utilities
 import Home from './Home';
 import PostsList from './PostsList';
 import CreatePost from './CreatePost';
