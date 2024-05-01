@@ -1,72 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchPost, updatePost } from './postsService'; // Assuming fetchPost is available for fetching single post
+import { Formik, Form, Field } from 'formik';
+import { fetchPost, updatePost } from './postsService'; // Ensure paths are correct
 
 function EditPost() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [initialValues, setInitialValues] = useState({ title: '', content: '' });
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchPostDetails = async () => {
-            setLoading(true);
+        const loadPostDetails = async () => {
             try {
-                const postDetails = await fetchPost(id);  // Fetch single post detail
+                const postDetails = await fetchPost(id);
                 if (postDetails) {
-                    setTitle(postDetails.title);
-                    setContent(postDetails.content);
+                    setInitialValues({ title: postDetails.title, content: postDetails.content });
                 } else {
-                    console.error("Post not found");
-                    navigate('/post-list');  // Redirect to the list if post is not found
+                    setError('Post not found');
+                    navigate('/post-list');
                 }
             } catch (error) {
                 console.error("Failed to load post details:", error);
-                navigate('/post-list');  // Redirect on error
+                setError(error.message || 'An error occurred while loading the post details.');
+                navigate('/post-list');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchPostDetails();
+        loadPostDetails();
     }, [id, navigate]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-
+    const handleSubmit = async (values, { setSubmitting }) => {
+        setSubmitting(true);
         try {
-            await updatePost(id, { title, content });
+            await updatePost(id, values);
             navigate(`/posts/${id}`);  // Navigate to post details page after update
         } catch (error) {
             console.error("Failed to update the post:", error);
+            setError(error.message || 'Failed to update the post.');
         } finally {
-            setLoading(false);
+            setSubmitting(false);
         }
     };
 
     if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="title">Title</label>
-            <input
-                id="title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-            />
-            <label htmlFor="content">Content</label>
-            <textarea
-                id="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-            />
-            <button type="submit" disabled={loading}>Save Changes</button>
-        </form>
+        <div>
+            <h1>Edit Post</h1>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit} enableReinitialize>
+                {({ isSubmitting }) => (
+                    <Form>
+                        <div>
+                            <label htmlFor="title">Title</label>
+                            <Field id="title" name="title" type="text" required />
+                        </div>
+                        <div>
+                            <label htmlFor="content">Content</label>
+                            <Field id="content" name="content" as="textarea" required />
+                        </div>
+                        <button type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? 'Saving...' : 'Save Changes'}
+                        </button>
+                    </Form>
+                )}
+            </Formik>
+        </div>
     );
 }
 
