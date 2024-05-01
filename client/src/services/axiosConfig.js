@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken } from './services/tokenService'; // Make sure this import path is correct
+import { getToken } from './tokenService'; // Make sure this import path is correct
 
 const axiosInstance = axios.create({
   baseURL: 'https://personal-blog-platform-a11db04dd963.herokuapp.com',
