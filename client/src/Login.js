@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from './services/axiosConfig';  // Make sure to import your configured Axios instance
-import { setToken } from './services/tokenService';  // Import setToken from tokenService
+import { setToken } from './services/tokenService'; // assuming you have a utility for setting tokens
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -10,13 +10,21 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/auth/login', { username, password });
+      const response = await axios.post('/auth/login', {
+        username,
+        password
+      });
+
+      console.log("Login response:", response.data);  // Check what the server actually returns, including the token
+
       if (response.data.token) {
-        setToken(response.data.token); // This should now be synchronous if possible
-        setTimeout(() => { // Ensure token is set before proceeding
-          onLogin(response.data.user);
-          console.log('Login successful:', response.data.message);
-        }, 500); // Test with a delay to rule out async storage issues
+        setToken(response.data.token);  // Use your token service to handle setting the token
+        console.log('Token set in local storage:', localStorage.getItem('jwtToken'));  // Log the token from local storage right after setting it
+
+        onLogin(response.data.user);  // Update the user state in your app
+        console.log('Login successful:', response.data.message);
+        console.log('Token received:', response.data.token);  // Specifically log the token
+        setErrorMessage('');
       } else {
         setErrorMessage('Login failed: No user data returned.');
       }
@@ -24,7 +32,7 @@ const Login = ({ onLogin }) => {
       setErrorMessage(error.response ? error.response.data.message : 'Error logging in');
       console.error('Login error:', error.response ? error.response.data : error.message);
     }
-  };  
+  };
 
   return (
     <div>
