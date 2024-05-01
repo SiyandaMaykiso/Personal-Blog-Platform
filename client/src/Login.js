@@ -18,6 +18,7 @@ const Login = ({ onLogin }) => {
 
       if (response.data.token) {
         localStorage.setItem('jwtToken', response.data.token);  // Store the token in local storage
+        console.log('Token set in local storage:', localStorage.getItem('jwtToken'));  // Log the token from local storage
         onLogin(response.data.user);  // Update the user state in your app
         console.log('Login successful:', response.data.message);
         console.log('Token received:', response.data.token);  // Specifically log the token
