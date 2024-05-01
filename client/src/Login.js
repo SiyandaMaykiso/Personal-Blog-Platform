@@ -10,19 +10,13 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/auth/login', {
-        username,
-        password
-      });
-
-      console.log("Login response:", response.data);  // Check what the server actually returns
-
+      const response = await axios.post('/auth/login', { username, password });
       if (response.data.token) {
-        setToken(response.data.token);  // Use setToken to handle token storage
-        console.log('Token received and stored:', response.data.token);
-        onLogin(response.data.user);  // Update the user state in your app
-        console.log('Login successful:', response.data.message);
-        setErrorMessage('');
+        setToken(response.data.token); // This should now be synchronous if possible
+        setTimeout(() => { // Ensure token is set before proceeding
+          onLogin(response.data.user);
+          console.log('Login successful:', response.data.message);
+        }, 500); // Test with a delay to rule out async storage issues
       } else {
         setErrorMessage('Login failed: No user data returned.');
       }
@@ -30,7 +24,7 @@ const Login = ({ onLogin }) => {
       setErrorMessage(error.response ? error.response.data.message : 'Error logging in');
       console.error('Login error:', error.response ? error.response.data : error.message);
     }
-  };
+  };  
 
   return (
     <div>
