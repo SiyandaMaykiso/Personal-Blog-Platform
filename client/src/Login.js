@@ -19,9 +19,13 @@ const Login = ({ onLogin }) => {
       if (response.data.token) {
         localStorage.setItem('jwtToken', response.data.token);  // Store the token in local storage
         console.log('Token set in local storage:', localStorage.getItem('jwtToken'));  // Log the token from local storage
-        onLogin(response.data.user);  // Update the user state in your app
-        console.log('Login successful:', response.data.message);
-        console.log('Token received:', response.data.token);  // Specifically log the token
+        
+        setTimeout(() => {  // Ensure async storage setting is complete before proceeding
+          onLogin(response.data.user);  // Update the user state in your app
+          console.log('Login successful:', response.data.message);
+          console.log('Token received:', response.data.token);  // Specifically log the token
+        }, 100); // Small timeout to ensure token is set
+        
         setErrorMessage('');
       } else {
         setErrorMessage('Login failed: No user data returned.');

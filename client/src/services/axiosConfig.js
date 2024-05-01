@@ -4,14 +4,15 @@ const axiosInstance = axios.create({
   baseURL: 'https://personal-blog-platform-a11db04dd963.herokuapp.com',
 });
 
-// Use an interceptor to attach the token to every request and log the Authorization header
+// Use an interceptor to attach the token to every request and log detailed token information
 axiosInstance.interceptors.request.use(function (config) {
   const token = localStorage.getItem('jwtToken');
+  console.log('Retrieved token from storage:', token);  // Log the token retrieved from storage
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    console.log('Authorization Header:', config.headers.Authorization);  // Log the Authorization header
+    console.log('Authorization Header set:', config.headers.Authorization);  // Confirm header setting
   } else {
-    delete config.headers.Authorization;  // Ensure no Authorization header is sent if no token is available
+    delete config.headers.Authorization;  // Clear Authorization header if no token
     console.log('No Authorization Header, token not available.');
   }
   return config;
