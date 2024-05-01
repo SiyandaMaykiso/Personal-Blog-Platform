@@ -9,7 +9,23 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(cors());
-app.use(helmet()); // Set security-related HTTP headers
+
+// Helmet setup with CSP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"], // Add your sources for scripts
+      styleSrc: ["'self'", 'https://fonts.googleapis.com'], // Add your sources for styles
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'], // Add your sources for fonts
+      imgSrc: ["'self'", 'data:'], // Allow images from self and data URLs
+      connectSrc: ["'self'"], // Add your sources for AJAX requests
+      objectSrc: ["'none'"], // Disallow Flash and other plugins
+      upgradeInsecureRequests: [],
+    }
+  }
+}));
+
 app.use(compression()); // Compress all routes
 
 const postsRoutes = require('./routes/postsRoutes');
