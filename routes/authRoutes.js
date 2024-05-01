@@ -67,7 +67,8 @@ router.post('/logout', (req, res) => {
 
 // Middleware to check if the user is authenticated using JWT
 const isAuthenticated = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Assume Bearer token
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1]; // Split 'Bearer token'
   console.log('Received token:', token);  // Log the received token
   if (!token) {
     return res.status(401).json({ message: "Unauthorized access - no token provided" });
