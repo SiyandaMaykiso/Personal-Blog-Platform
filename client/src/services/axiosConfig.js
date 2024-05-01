@@ -7,7 +7,11 @@ const axiosInstance = axios.create({
 // Use an interceptor to attach the token to every request and log the config
 axiosInstance.interceptors.request.use(function (config) {
   const token = localStorage.getItem('jwtToken');
-  config.headers.Authorization = token ? `Bearer ${token}` : '';
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    delete config.headers.Authorization;  // Ensure no Authorization header is sent if no token is available
+  }
   console.log('Sending request with config:', config);  // Log the request configuration
   return config;
 }, function (error) {
