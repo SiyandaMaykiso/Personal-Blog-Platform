@@ -12,9 +12,10 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('jwtToken'));
 
   useEffect(() => {
+    // Delay the session check slightly to ensure local storage has updated
     if (token) {
-      // Delay the session check slightly to ensure local storage has updated
       setTimeout(() => {
+        console.log('Using token for session validation:', token);
         axios.get('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/session')
           .then(response => {
             setUser(response.data.user);
@@ -26,17 +27,18 @@ function App() {
             setToken(null);
             localStorage.removeItem('jwtToken'); // Remove invalid or expired token
           });
-      }, 100); // Delay of 100 milliseconds
+      }, 500); // Increased delay to test if timing is an issue
     }
   }, [token]); // Dependency array includes token to trigger effect when it changes
 
   const handleUserLogin = (authData) => {
     localStorage.setItem('jwtToken', authData.token);
     console.log('Token set in local storage:', localStorage.getItem('jwtToken')); // Confirm token is set
+    // Use a timeout to delay setting the state to ensure localStorage is properly synchronized
     setTimeout(() => {
-      setToken(authData.token); // Set token in state to trigger useEffect after a brief delay
+      setToken(authData.token); // Set token in state to trigger useEffect
       setUser(authData.user);
-    }, 100); // Wait 100ms to update state to ensure localStorage is synced
+    }, 500); // Delay to ensure all subscribers see the update
   };
 
   const handleLogout = () => {
