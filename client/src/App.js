@@ -12,6 +12,7 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('jwtToken'));
 
   useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
     if (token) {
       // Configure Axios to use the token
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;

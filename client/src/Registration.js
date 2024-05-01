@@ -22,6 +22,7 @@ const Registration = ({ onRegistration }) => {
 
       // Assuming the onRegistration callback expects JWT token and user info
       if (onRegistration && response.data.token) {
+        localStorage.setItem('jwtToken', response.data.token);  // Store the token
         onRegistration(response.data.token, response.data.user);
       }
 
