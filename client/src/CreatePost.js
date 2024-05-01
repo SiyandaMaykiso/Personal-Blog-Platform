@@ -17,6 +17,12 @@ const CreatePost = () => {
       return;
     }
 
+    if (!values.title || !values.content) {
+      setSubmissionError('Both title and content are required.');
+      setSubmitting(false);
+      return;
+    }
+
     try {
       const response = await fetch('https://personal-blog-platform-a11db04dd963.herokuapp.com/posts', {
         method: 'POST',
