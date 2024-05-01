@@ -7,39 +7,34 @@ const compression = require('compression');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// CORS options to dynamically handle development and production environments
-const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' ? 'https://personal-blog-platform-a11db04dd963.herokuapp.com' : 'http://localhost:3000',
-  credentials: true, // Must be true to accept cookies via AJAX requests
-};
-
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(helmet()); // Set security-related HTTP headers
 app.use(compression()); // Compress all routes
 
 const postsRoutes = require('./routes/postsRoutes');
 const authRoutes = require('./routes/authRoutes');
 
-app.use('/posts', postsRoutes); // Assume JWT authentication is handled in the routes themselves
+app.use('/posts', postsRoutes);
 app.use('/auth', authRoutes);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  if (req.accepts('html')) {
+    console.log('Serving index.html for path:', req.path);
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  }
 });
 
-// Improved error handling for production
+app.use((req, res, next) => {
+  console.log('Route not found:', req.path);
+  res.status(404).send('Sorry, that route does not exist.');
+});
+
 app.use((err, req, res, next) => {
-  console.error("Error status: ", err.status || 500);
-  console.error("Error message: ", err.message);
-  if (process.env.NODE_ENV === 'production') {
-    res.status(err.status || 500).send('Something went wrong');
-  } else {
-    console.error("Error stack: ", err.stack);
-    res.status(err.status || 500).send(err.message);
-  }
+  console.error("Server error:", err.stack);
+  res.status(500).send('Something broke!');
 });
 
 app.listen(PORT, () => {

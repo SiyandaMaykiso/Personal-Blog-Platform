@@ -1,76 +1,69 @@
 import React, { useState } from 'react';
-import axios from './services/axiosConfig';  // Assuming axiosConfig is in the services folder
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';  // Ensure the path to AuthContext is correct
 
-const Registration = ({ onRegistration }) => {
+function Registration() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [registrationError, setRegistrationError] = useState('');
+
+  const navigate = useNavigate();
+  const { register } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post('/auth/register', {
-        username,
-        email,
-        password,
-      });
-
-      console.log('User registered:', response.data);
-      setErrorMessage('');
-
-      // Assuming the onRegistration callback expects JWT token and user info
-      if (onRegistration && response.data.token) {
-        localStorage.setItem('jwtToken', response.data.token);  // Store the token
-        onRegistration(response.data.token, response.data.user);
-      }
-
+      await register(username, email, password);
+      navigate('/dashboard');  // Navigate to dashboard after successful registration
     } catch (error) {
-      console.error('Error', error.response ? error.response.data : error.message);
-      setErrorMessage(error.response ? error.response.data.message : 'Error registering user');
+      console.error('Registration error:', error);
+      setRegistrationError(error.message || 'Failed to register. Please try again.');
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          id="register-username"
-          name="username"
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          autoComplete="username"
-        />
-        <input
-          id="register-email"
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-        />
-        <input
-          id="register-password"
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          autoComplete="new-password"
-        />
-        <button type="submit">Register</button>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <h2>Registration Form</h2>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', width: '300px' }}>
+        <div style={{ marginBottom: '10px' }}>
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            required
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ width: '100%', padding: '8px', margin: '4px 0' }}
+          />
+        </div>
+        <div style={{ marginBottom: '10px' }}>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ width: '100%', padding: '8px', margin: '4px 0' }}
+          />
+        </div>
+        <div style={{ marginBottom: '10px' }}>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ width: '100%', padding: '8px', margin: '4px 0' }}
+          />
+        </div>
+        <button type="submit" style={{ padding: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px' }}>Register</button>
+        {registrationError && <div style={{ color: 'red', marginTop: '10px' }}>{registrationError}</div>}
       </form>
     </div>
   );
-};
+}
 
 export default Registration;
