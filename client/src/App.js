@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from './services/axiosConfig';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { setToken, getToken, removeToken } from './tokenService'; // Import token utilities
 import Home from './Home';
 import PostsList from './PostsList';
 import CreatePost from './CreatePost';
@@ -11,9 +12,8 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('jwtToken');
+    const token = getToken();
     if (token) {
-      // Directly use the token from local storage to make the initial check
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       axios.get('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/session')
         .then(response => {
@@ -23,22 +23,18 @@ function App() {
         .catch(error => {
           console.log('Session check failed:', error);
           setUser(null);
-          localStorage.removeItem('jwtToken'); // Remove invalid or expired token
+          removeToken(); // Remove invalid or expired token using utility
         });
     }
   }, []); // Only run once on mount
 
   const handleUserLogin = (authData) => {
-    localStorage.setItem('jwtToken', authData.token);
+    setToken(authData.token); // Use utility to set token
     setUser(authData.user);
-    // Immediately set the token for axios instance
-    axios.defaults.headers.common['Authorization'] = `Bearer ${authData.token}`;
-    console.log('Token set for axios instance');
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('jwtToken');
-    delete axios.defaults.headers.common['Authorization'];
+    removeToken(); // Use utility to remove token
     setUser(null);
   };
 
