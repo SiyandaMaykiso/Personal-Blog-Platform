@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); // Import JWT library
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const pool = require('../db');
 require('dotenv').config();
@@ -69,21 +69,25 @@ router.post('/logout', (req, res) => {
 // Middleware to check if the user is authenticated using JWT
 const isAuthenticated = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1]; // Assume Bearer token
+  console.log('Received token:', token);  // Log the received token
   if (!token) {
     return res.status(401).json({ message: "Unauthorized access - no token provided" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Token is valid, decoded payload:', decoded);  // Log the successful decoding
     req.user = decoded;
     next();
   } catch (error) {
+    console.error('Token verification failed:', error);  // Log the error if verification fails
     res.status(401).json({ message: "Unauthorized access - invalid token" });
   }
 };
 
 // Check token validity
 router.get('/session', isAuthenticated, (req, res) => {
+  console.log('Token decoded successfully:', req.user);  // Log the decoded user information
   res.json({ isLoggedIn: true, user: req.user });
 });
 
