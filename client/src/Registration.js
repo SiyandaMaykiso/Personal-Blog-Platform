@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';  // Ensure the path to AuthContext is correct
+import { useAuth } from './contexts/AuthContext';  // Ensure the path to AuthContext is correct
 
 function Registration() {
   const [username, setUsername] = useState('');
