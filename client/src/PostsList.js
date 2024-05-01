@@ -63,12 +63,17 @@ function PostsList() {
     navigate(`/edit-post/${postId}`);
   };
 
+  const handleCreatePost = () => {
+    navigate('/create-post'); // Update this path as needed
+  };
+
   if (loading) return <p>Loading posts...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
       <h2>Posts</h2>
+      <button onClick={handleCreatePost} style={{ marginBottom: '20px' }}>Create New Post</button>
       {posts.length > 0 ? (
         posts.map(post => (
           <div key={post.id}>
