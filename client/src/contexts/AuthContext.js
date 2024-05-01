@@ -53,13 +53,16 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password) => {
     setLoading(true);
     try {
-      const response = await fetch('https://personal-blog-platform-a11db04dd963.herokuapp.com/register', {
+      const response = await fetch('https://personal-blog-platform-a11db04dd963.herokuapp.com/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),
       });
 
-      if (!response.ok) throw new Error('Failed to register');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to register');
+      }
 
       const data = await response.json();
       setCurrentUser(data.user);
