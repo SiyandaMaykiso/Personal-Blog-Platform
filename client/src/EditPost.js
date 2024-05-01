@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
 import { fetchPost, updatePost } from './postsService'; // Ensure paths are correct
 
 function EditPost() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [initialValues, setInitialValues] = useState({ title: '', content: '' });
+    const [post, setPost] = useState({ title: '', content: '' });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -15,7 +14,7 @@ function EditPost() {
             try {
                 const postDetails = await fetchPost(id);
                 if (postDetails) {
-                    setInitialValues({ title: postDetails.title, content: postDetails.content });
+                    setPost({ title: postDetails.title, content: postDetails.content });
                 } else {
                     setError('Post not found');
                     navigate('/post-list');
@@ -32,17 +31,23 @@ function EditPost() {
         loadPostDetails();
     }, [id, navigate]);
 
-    const handleSubmit = async (values, { setSubmitting }) => {
-        setSubmitting(true);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setLoading(true);
         try {
-            await updatePost(id, values);
+            await updatePost(id, post);
             navigate(`/posts/${id}`);  // Navigate to post details page after update
         } catch (error) {
             console.error("Failed to update the post:", error);
             setError(error.message || 'Failed to update the post.');
         } finally {
-            setSubmitting(false);
+            setLoading(false);
         }
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setPost(prev => ({ ...prev, [name]: value }));
     };
 
     if (loading) return <p>Loading...</p>;
@@ -51,23 +56,19 @@ function EditPost() {
     return (
         <div>
             <h1>Edit Post</h1>
-            <Formik initialValues={initialValues} onSubmit={handleSubmit} enableReinitialize>
-                {({ isSubmitting }) => (
-                    <Form>
-                        <div>
-                            <label htmlFor="title">Title</label>
-                            <Field id="title" name="title" type="text" required />
-                        </div>
-                        <div>
-                            <label htmlFor="content">Content</label>
-                            <Field id="content" name="content" as="textarea" required />
-                        </div>
-                        <button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? 'Saving...' : 'Save Changes'}
-                        </button>
-                    </Form>
-                )}
-            </Formik>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="title">Title</label>
+                    <input id="title" name="title" type="text" value={post.title} onChange={handleChange} required />
+                </div>
+                <div>
+                    <label htmlFor="content">Content</label>
+                    <textarea id="content" name="content" value={post.content} onChange={handleChange} required />
+                </div>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Saving...' : 'Save Changes'}
+                </button>
+            </form>
         </div>
     );
 }
