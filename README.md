@@ -1,39 +1,56 @@
-Personal Blog Platform
+# Personal Blog Platform
 
-Overview
+## Description
 
-The Personal Blog Platform is a dynamic web application designed for writers, bloggers, and creators who wish to publish, manage, and share their writings. Built using React for the frontend and PostgreSQL for the backend, this platform offers a sleek user interface for an engaging writing and reading experience. With integrated user authentication, authors have the exclusive ability to edit or delete their posts, ensuring personal control over their content.
+The Personal Blog Platform is a dynamic web application designed for writers, bloggers, and content creators to publish, manage, and share their posts. This platform offers robust user authentication and sleek user interfaces, providing an engaging writing and reading experience that is accessible from any device.
 
-Features
+## Features
 
-User Authentication: Secure login/logout functionality that allows users to register, sign in to their accounts, and manage sessions.
-CRUD Operations: Users can create, read, update, and delete blog posts.
-Responsive Design: A clean, responsive interface for an optimal viewing experience across various devices and screen sizes.
-Post Management: Authors can easily edit or delete their own posts, keeping their content up-to-date.
+* User Authentication: Secure login and registration functionality.
+* Post Management: Users can create, update, view, and delete their blog posts.
+* Responsive Design: Fully responsive web design for an optimal user experience across different devices.
+* Security: Implementation of best practices in web security.
 
-Getting Started
+## Technologies Used
 
-Prerequisites
-Node.js
-PostgreSQL
-npm
+### Frontend:
 
-Deployed App
+* React: For building the interactive user interface.
+* React Router: For navigation within the application.
+
+### Backend:
+
+* Node.js: The runtime environment for running the server-side JavaScript.
+* Express: Framework used to build the web application server.
+* PostgreSQL: Relational database to store user data and blog posts.
+
+### Authentication:
+
+* JWT (JSON Web Tokens): For secure transmission of user information as a JSON object.
+
+### Security:
+
+* Bcrypt: For hashing and securing user passwords.
+
+### Deployment:
+
+* Heroku: Cloud platform service used to deploy the web application.
+
+## Live Application
+
+Experience the Personal Blog Platform live here:
 
 https://personal-blog-platform-a11db04dd963.herokuapp.com/
 
-Installation
+Application Screenshots
 
-Clone the repository:
+* **Create Post Page:**
+  ![Create Post Page](https://github.com/SiyandaMaykiso/Personal-Blog-Platform/blob/main/Screenshots/Create%20Post%20Screenshot.png)
 
-Install dependencies:
-npm install
+* **Post List Page:**
+  ![Post List Page](https://github.com/SiyandaMaykiso/Personal-Blog-Platform/blob/main/Screenshots/Post%20List%20Screenshot.png)
 
-Usage
+* **Edit Post Page:**
+  ![Edit Post Page](https://github.com/SiyandaMaykiso/Personal-Blog-Platform/blob/main/Screenshots/Edit%20Post%20Screenshot.png)
 
-After launching the application, navigate to http://localhost:3000 in your web browser. You can register a new user account or log in if you already have one. Once authenticated, you can start creating, viewing, editing, or deleting blog posts.
-
-Screenshot
-
-![Screenshot](https://github.com/SiyandaMaykiso/Personal-Blog-Platform/blob/main/client/public/desktop-screenshot.jpg?raw=true)
-
+* **Post Detail:**
