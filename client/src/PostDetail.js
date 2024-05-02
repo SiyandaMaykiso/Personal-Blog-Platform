@@ -5,7 +5,7 @@ import { useAuth } from './contexts/AuthContext'; // Ensure the path is correct
 const PostDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { authToken } = useAuth(); // Assuming AuthContext provides authToken
+  const { authToken } = useAuth();
   const [post, setPost] = useState({});
   const [error, setError] = useState('');
 
@@ -54,7 +54,7 @@ const PostDetail = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="container post-detail-container" style={{ maxWidth: '800px', margin: 'auto' }}>
+    <div className="container post-detail-container">
       <div className="navigation-buttons">
         <button onClick={() => navigate('/')} className="btn btn-secondary">Back to Posts</button>
         <button onClick={() => navigate(`/edit-post/${id}`)} className="btn btn-primary">Edit Post</button>
