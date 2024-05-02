@@ -59,7 +59,7 @@ function EditPost() {
         <div>
             <h1>Edit Post</h1>
             <div className="navigation-buttons">
-                <button onClick={() => navigate('/')} className="btn btn-secondary">Back to Create Post</button>
+                <button onClick={() => navigate('/create-post')} className="btn btn-secondary">Back to Create Post</button>
                 <button onClick={() => navigate('/post-list')} className="btn btn-primary">Back to Posts List</button>
             </div>
             <form onSubmit={handleSubmit}>
