@@ -1,4 +1,4 @@
-const axios = require('./services/axiosConfig'); // Correct setup for interceptors
+const axios = require('./services/axiosConfig'); // Ensure this is the correct path to your axios configuration
 
 // Utility function for handling errors
 const handleError = (error, message) => {
@@ -6,6 +6,7 @@ const handleError = (error, message) => {
   throw new Error(message);
 };
 
+// Fetch a single post by its ID
 export const fetchPost = async (id) => {
   try {
     const response = await axios.get(`/posts/${id}`);
@@ -15,6 +16,7 @@ export const fetchPost = async (id) => {
   }
 };
 
+// Create a new post
 export const createPost = async (postData) => {
   try {
     const response = await axios.post('/posts', postData);
@@ -24,6 +26,7 @@ export const createPost = async (postData) => {
   }
 };
 
+// Update an existing post
 export const updatePost = async (id, postData) => {
   try {
     const response = await axios.put(`/posts/${id}`, postData);
@@ -33,6 +36,7 @@ export const updatePost = async (id, postData) => {
   }
 };
 
+// Delete a post
 export const deletePost = async (id) => {
   try {
     await axios.delete(`/posts/${id}`);
