@@ -7,7 +7,7 @@ function PostsList() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { authToken, loading: authLoading } = useAuth();
+  const { authToken, loading: authLoading, logout } = useAuth(); // Include logout function
 
   const fetchPosts = useCallback(async () => {
     if (authLoading || !authToken) {
@@ -67,12 +67,18 @@ function PostsList() {
     navigate('/create-post'); // Update this path as needed
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login'); // Redirect to login page after logout
+  };
+
   if (loading) return <p>Loading posts...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div className="home-container">
       <h2>Posts</h2>
+      <button onClick={handleLogout} className="btn btn-secondary" style={{ marginBottom: '20px' }}>Logout</button> {/* Logout Button */}
       <button onClick={handleCreatePost} className="btn btn-primary" style={{ marginBottom: '20px' }}>Create New Post</button>
       {posts.length > 0 ? (
         posts.map(post => (
