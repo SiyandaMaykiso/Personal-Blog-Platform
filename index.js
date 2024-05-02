@@ -10,17 +10,21 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
-// Helmet setup with CSP
+// Helmet setup with enhanced CSP
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"], // Add your sources for scripts
-      styleSrc: ["'self'", 'https://fonts.googleapis.com'], // Add your sources for styles
-      fontSrc: ["'self'", 'https://fonts.gstatic.com'], // Add your sources for fonts
-      imgSrc: ["'self'", 'data:'], // Allow images from self and data URLs
-      connectSrc: ["'self'"], // Add your sources for AJAX requests
-      objectSrc: ["'none'"], // Disallow Flash and other plugins
+      scriptSrc: ["'self'", "'unsafe-inline'"], // Keep or adjust as necessary
+      styleSrc: [
+        "'self'", 
+        'https://fonts.googleapis.com', 
+        "'unsafe-inline'" // Allows inline styles if needed
+      ],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      imgSrc: ["'self'", 'data:'],
+      connectSrc: ["'self'"],
+      objectSrc: ["'none'"],
       upgradeInsecureRequests: [],
     }
   }
