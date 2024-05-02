@@ -66,7 +66,7 @@ const CreatePost = () => {
       {successMessage && <div className="success-message">{successMessage}</div>}
       <form onSubmit={handleSubmit} className="form">
         <div className="form-control">
-          <label htmlFor="title">Title</label>
+          <label htmlFor="post-title">Title</label>
           <input
             id="title"
             name="title"
