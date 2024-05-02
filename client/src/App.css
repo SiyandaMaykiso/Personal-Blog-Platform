@@ -52,9 +52,6 @@ input[type="text"], textarea {
   border: 2px solid #ccc; /* Thicker border */
   border-radius: 4px;
   transition: border-color 0.3s; /* Smooth transition */
-  font-size: 1.25rem; /* Larger font size for better readability */
-  padding: 15px; /* More padding for a larger input field */
-  border: 2px solid #ccc; /* Optional: make the border thicker for more prominence */
 }
 
 
