@@ -14,7 +14,7 @@ function EditPost() {
     useEffect(() => {
         const loadPostDetails = async () => {
             try {
-                const postDetails = await fetchPost(id, getAuthHeader());
+                const postDetails = await fetchPost(id, getAuthHeader);
                 if (postDetails) {
                     setPost({ title: postDetails.title, content: postDetails.content });
                 } else {
@@ -31,13 +31,13 @@ function EditPost() {
         };
 
         loadPostDetails();
-    }, [id, navigate, getAuthHeader]);
+    }, [id, navigate, getAuthHeader]); // Include getAuthHeader in dependencies
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
         try {
-            await updatePost(id, post, getAuthHeader());
+            await updatePost(id, post, getAuthHeader);
             navigate(`/post-detail/${id}`);  // Navigate to post details page after update
         } catch (error) {
             console.error("Failed to update the post:", error);
@@ -58,10 +58,6 @@ function EditPost() {
     return (
         <div>
             <h1>Edit Post</h1>
-            <div className="navigation-buttons">
-                <button onClick={() => navigate('/create-post')} className="btn btn-secondary">Back to Create Post</button>
-                <button onClick={() => navigate('/post-list')} className="btn btn-primary">Back to Posts List</button>
-            </div>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="title">Title</label>
