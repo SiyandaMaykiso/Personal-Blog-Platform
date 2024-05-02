@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Home from './Home';
 import PostsList from './PostsList';
+import PostDetail from './PostDetail'; // Import the PostDetail component
 import CreatePost from './CreatePost';
 import EditPost from './EditPost';
 import Login from './Login';
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/post-list" element={<PrivateRoute><PostsList /></PrivateRoute>} />
+          <Route path="/posts/:id" element={<PrivateRoute><PostDetail /></PrivateRoute>} />  // New route for PostDetail
           <Route path="/create-post" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
           <Route path="/edit-post/:id" element={<PrivateRoute><EditPost /></PrivateRoute>} />
           <Route path="/login" element={<Login />} />
