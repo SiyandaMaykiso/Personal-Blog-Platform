@@ -1,5 +1,3 @@
-import { useAuth } from './contexts/AuthContext'; // Ensure the path is correct
-
 // Utility function for handling errors
 const handleError = (error, message) => {
   console.error(message, error);
@@ -7,8 +5,7 @@ const handleError = (error, message) => {
 };
 
 // Fetch a single post by its ID
-export const fetchPost = async (id) => {
-  const { getAuthHeader } = useAuth();
+export const fetchPost = async (id, getAuthHeader) => {
   try {
     const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, {
       method: 'GET',
@@ -25,8 +22,7 @@ export const fetchPost = async (id) => {
 };
 
 // Create a new post
-export const createPost = async (postData) => {
-  const { getAuthHeader } = useAuth();
+export const createPost = async (postData, getAuthHeader) => {
   try {
     const response = await fetch('https://personal-blog-platform-a11db04dd963.herokuapp.com/posts', {
       method: 'POST',
@@ -44,8 +40,7 @@ export const createPost = async (postData) => {
 };
 
 // Update an existing post
-export const updatePost = async (id, postData) => {
-  const { getAuthHeader } = useAuth();
+export const updatePost = async (id, postData, getAuthHeader) => {
   try {
     const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, {
       method: 'PUT',
@@ -63,8 +58,7 @@ export const updatePost = async (id, postData) => {
 };
 
 // Delete a post
-export const deletePost = async (id) => {
-  const { getAuthHeader } = useAuth();
+export const deletePost = async (id, getAuthHeader) => {
   try {
     const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, {
       method: 'DELETE',
