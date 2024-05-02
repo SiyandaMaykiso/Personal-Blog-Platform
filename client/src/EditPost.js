@@ -38,7 +38,7 @@ function EditPost() {
         setLoading(true);
         try {
             await updatePost(id, post, getAuthHeader);
-            navigate(`/posts/${id}`);  // Navigate to post details page after update
+            navigate(`/post-detail/${id}`);  // Navigate to post details page after update
         } catch (error) {
             console.error("Failed to update the post:", error);
             setError(error.message || 'Failed to update the post.');

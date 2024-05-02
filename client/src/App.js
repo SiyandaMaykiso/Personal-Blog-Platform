@@ -22,7 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/post-list" element={<PrivateRoute><PostsList /></PrivateRoute>} />
-          <Route path="/posts/:id" element={<PrivateRoute><PostDetail /></PrivateRoute>} />  // New route for PostDetail
+          <Route path="/post-detail/:id" element={<PrivateRoute><PostDetail /></PrivateRoute>} />  // New route for PostDetail
           <Route path="/create-post" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
           <Route path="/edit-post/:id" element={<PrivateRoute><EditPost /></PrivateRoute>} />
           <Route path="/login" element={<Login />} />

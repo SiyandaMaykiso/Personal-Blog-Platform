@@ -81,7 +81,7 @@ function PostsList() {
             <p className="post-content">{post.content}</p>
             <button onClick={() => handleEditPost(post.id)} className="btn btn-secondary">Edit</button>
             <button onClick={() => handleDeletePost(post.id)} className="btn btn-danger">Delete</button>
-            <button onClick={() => navigate(`/posts/${post.id}`)} className="btn btn-info">View Details</button>
+            <button onClick={() => navigate(`/post-detail/${post.id}`)} className="btn btn-info">View Details</button>
           </div>
         ))
       ) : (
