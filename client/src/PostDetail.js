@@ -56,7 +56,7 @@ const PostDetail = () => {
   return (
     <div className="container post-detail-container">
       <div className="navigation-buttons">
-        <button onClick={() => navigate('/')} className="btn btn-secondary">Back to Posts</button>
+        <button onClick={() => navigate('/post-list')} className="btn btn-secondary">Back to Posts</button>
         <button onClick={() => navigate(`/edit-post/${id}`)} className="btn btn-primary">Edit Post</button>
         <button onClick={handleDelete} className="btn btn-danger">Delete Post</button>
       </div>
