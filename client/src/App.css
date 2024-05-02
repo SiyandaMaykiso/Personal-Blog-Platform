@@ -75,15 +75,15 @@ button[type="submit"]:hover {
 
 .post-item {
   background-color: #fff;
-  border-radius: 8px; /* Increased from 5px for more rounded corners */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Slightly deeper shadow for a 'lifted' effect */
-  padding: 24px; /* Increased padding for more internal space */
-  margin-bottom: 24px; /* Increased margin for more space between items */
-  transition: box-shadow 0.3s; /* Smooth transition for hover effects */
+  border-radius: 8px; /* More pronounced rounded corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12); /* Slightly darker shadow for depth */
+  padding: 30px; /* Increased padding for more space inside */
+  margin-bottom: 30px; /* Increased space between cards */
+  transition: box-shadow 0.3s; /* Smooth shadow transition */
 }
 
 .post-item:hover {
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Enhanced hover effect */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.18); /* Enhanced hover effect */
 }
 
 .post-title {
