@@ -71,16 +71,16 @@ function PostsList() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <div className="home-container">
       <h2>Posts</h2>
-      <button onClick={handleCreatePost} style={{ marginBottom: '20px' }}>Create New Post</button>
+      <button onClick={handleCreatePost} className="btn btn-primary" style={{ marginBottom: '20px' }}>Create New Post</button>
       {posts.length > 0 ? (
         posts.map(post => (
-          <div key={post.id}>
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
-            <button onClick={() => handleEditPost(post.id)}>Edit</button>
-            <button onClick={() => handleDeletePost(post.id)}>Delete</button>
+          <div key={post.id} className="post-item">
+            <h3 className="post-title">{post.title}</h3>
+            <p className="post-content">{post.content}</p>
+            <button onClick={() => handleEditPost(post.id)} className="btn btn-secondary">Edit</button>
+            <button onClick={() => handleDeletePost(post.id)} className="btn btn-danger">Delete</button>
           </div>
         ))
       ) : (
