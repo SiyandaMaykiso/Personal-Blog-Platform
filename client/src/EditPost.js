@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchPost, updatePost } from './postsService'; // Ensure paths are correct
+import { useAuth } from './contexts/AuthContext'; // Ensure path is correct
 
 function EditPost() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { getAuthHeader } = useAuth(); // Use the AuthContext
     const [post, setPost] = useState({ title: '', content: '' });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -12,7 +14,7 @@ function EditPost() {
     useEffect(() => {
         const loadPostDetails = async () => {
             try {
-                const postDetails = await fetchPost(id);
+                const postDetails = await fetchPost(id, getAuthHeader);
                 if (postDetails) {
                     setPost({ title: postDetails.title, content: postDetails.content });
                 } else {
@@ -29,13 +31,13 @@ function EditPost() {
         };
 
         loadPostDetails();
-    }, [id, navigate]);
+    }, [id, navigate, getAuthHeader]); // Include getAuthHeader in dependencies
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
         try {
-            await updatePost(id, post);
+            await updatePost(id, post, getAuthHeader);
             navigate(`/posts/${id}`);  // Navigate to post details page after update
         } catch (error) {
             console.error("Failed to update the post:", error);
