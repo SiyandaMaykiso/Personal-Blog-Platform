@@ -75,23 +75,55 @@ button[type="submit"]:hover {
 
 .post-item {
   background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 24px; /* More padding for better readability */
-  margin-bottom: 20px;
-  transition: box-shadow 0.3s; /* Smooth shadow transition */
+  border-radius: 8px; /* Increased from 5px for more rounded corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Slightly deeper shadow for a 'lifted' effect */
+  padding: 24px; /* Increased padding for more internal space */
+  margin-bottom: 24px; /* Increased margin for more space between items */
+  transition: box-shadow 0.3s; /* Smooth transition for hover effects */
 }
 
 .post-item:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Enhanced hover effect */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Enhanced hover effect */
 }
 
 .post-title {
-  font-size: 1.75rem;
+  font-size: 1.75rem; /* Ensuring title size matches detail view */
+  cursor: pointer; /* Indicates clickable */
 }
 
 .post-content {
-  color: #555; /* Slightly lighter for less strain */
+  color: #555; /* Lighter color for readability */
+  margin-bottom: 20px; /* Adds space below the content before buttons */
+}
+
+/* Button styles to match the PostDetail navigation buttons */
+.button {
+  padding: 10px 20px;
+  margin-right: 10px; /* Adds space between buttons */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  color: white;
 }
 
 footer {
