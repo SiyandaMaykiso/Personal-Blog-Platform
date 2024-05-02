@@ -73,35 +73,38 @@ button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-.post-item {
+.post-item, .post-detail-container {
   background-color: #fff;
-  border-radius: 8px; /* More pronounced rounded corners */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.12); /* Slightly darker shadow for depth */
-  padding: 30px; /* Increased padding for more space inside */
-  margin-bottom: 30px; /* Increased space between cards */
-  transition: box-shadow 0.3s; /* Smooth shadow transition */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 30px;
+  margin-bottom: 20px;
+  transition: box-shadow 0.3s;
 }
 
-.post-item:hover {
-  box-shadow: 0 6px 12px rgba(0,0,0,0.18); /* Enhanced hover effect */
+.post-item:hover, .post-detail-container:hover {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-.post-title {
-  font-size: 1.75rem; /* Ensuring title size matches detail view */
-  cursor: pointer; /* Indicates clickable */
+.post-title, h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  cursor: pointer;
 }
 
-.post-content {
-  color: #555; /* Lighter color for readability */
-  margin-bottom: 20px; /* Adds space below the content before buttons */
+.post-content, p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
-/* Button styles to match the PostDetail navigation buttons */
-.button {
+.button, .btn {
   padding: 10px 20px;
-  margin-right: 10px; /* Adds space between buttons */
+  font-size: 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  margin-right: 10px;
   cursor: pointer;
   font-weight: bold;
 }
@@ -130,7 +133,7 @@ footer {
   background-color: #f4f4f4;
   color: #333;
   padding: 10px;
-  text-align: center; /* Centered text for better appearance */
+  text-align: center;
 }
 
 .home-container, .auth-container {
@@ -163,154 +166,5 @@ footer {
 
   .login, .registration {
     width: 100%;
-  }
-}
-
-.post-detail-container {
-  font-family: 'Georgia', serif;
-  color: #333;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  padding: 20px;
-  margin-top: 20px;
-}
-
-.navigation-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.navigation-buttons button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.navigation-buttons .btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.navigation-buttons .btn-primary {
-  background-color: #007bff;
-  color: white;
-}
-
-.navigation-buttons .btn-danger {
-  background-color: #dc3545;
-  color: white;
-}
-
-h2 {
-  color: #007bff;
-  font-size: 24px;
-}
-
-p {
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-ul {
-  padding-left: 20px;
-}
-
-li {
-  margin-bottom: 10px;
-}
-
-.comment-section {
-  margin-top: 40px;
-}
-
-.comment-section h3 {
-  color: #007bff;
-  margin-bottom: 10px;
-}
-
-.post-list-container {
-  font-family: 'Merriweather', serif; /* Consistent font with PostDetail */
-  color: #333;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  padding: 30px; /* Increased padding for a more spacious layout */
-  margin-top: 20px;
-  max-width: 900px; /* Wider container for more content */
-  margin: 20px auto; /* Increased margin for better centering and spacing */
-}
-
-.post-list-title {
-  color: #0056b3;
-  font-size: 26px; /* Slightly larger size for more prominence */
-  margin-bottom: 25px; /* Increased spacing between title and list items */
-}
-
-.post-item {
-  border-bottom: 1px solid #ccc; /* Adds a subtle separator */
-  padding: 20px 0; /* Increased padding inside each post item */
-  transition: background-color 0.3s; /* Smooth background color transition on hover */
-}
-
-.post-item:last-child {
-  border-bottom: none; /* Removes border from the last item for clean appearance */
-}
-
-.post-item:hover {
-  background-color: #f4f4f4; /* Light background on hover for emphasis */
-}
-
-.post-title {
-  font-size: 1.75rem; /* Size adjustment for hierarchy */
-  color: #007bff; /* Consistent color for titles */
-  margin-bottom: 10px; /* Increased gap between title and content */
-}
-
-.post-content {
-  color: #666; /* Lighter text for less emphasis on content preview */
-  font-size: 1.1rem; /* Slightly larger font size for content */
-  line-height: 1.6; /* Enhanced readability */
-}
-
-.navigation-buttons {
-  display: flex;
-  justify-content: flex-start; /* Aligns buttons to the left */
-  gap: 15px; /* Increased gap for aesthetic spacing */
-}
-
-.navigation-buttons button {
-  padding: 10px 20px; /* Larger padding for more prominent buttons */
-  font-size: 1rem; /* Standard font size for button text */
-  border-radius: 4px; /* Rounded corners for buttons */
-  font-weight: bold; /* Bold font for better visibility */
-  background-color: #007bff; /* Consistent background color for primary action */
-  color: white; /* Text color for contrast */
-}
-
-.navigation-buttons .btn-secondary {
-  background-color: #6c757d; /* Gray background for secondary actions */
-}
-
-.navigation-buttons .btn-danger {
-  background-color: #dc3545; /* Red background for delete actions */
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-  .post-list-container {
-    padding: 20px; /* Adjust padding for smaller screens */
-  }
-
-  .post-title, .post-content {
-    font-size: 1.5rem; /* Adjust font size for better readability on mobile */
-  }
-
-  .navigation-buttons button {
-    padding: 8px 16px; /* Smaller padding for compact appearance */
-    font-size: 0.9rem; /* Smaller font size for button text on mobile devices */
   }
 }
