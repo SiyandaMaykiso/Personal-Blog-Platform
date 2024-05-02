@@ -53,4 +53,5 @@ Application Screenshots
 * **Edit Post Page:**
   ![Edit Post Page](https://github.com/SiyandaMaykiso/Personal-Blog-Platform/blob/main/Screenshots/Edit%20Post%20Screenshot.png)
 
-* **Post Detail:**
+* **Post Detail Page:**
+  ![Post Detail Page](https://github.com/SiyandaMaykiso/Personal-Blog-Platform/blob/main/Screenshots/View%20Post%20Screenshot.png)
