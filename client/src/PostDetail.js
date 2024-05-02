@@ -64,13 +64,6 @@ const PostDetail = () => {
         <>
           <h2>{post.title}</h2>
           <p style={{ marginTop: '10px', marginBottom: '20px' }}>{post.content}</p>
-          {/* Assuming you might want to add a comment section similar to recipes */}
-          <h3>Comments</h3>
-          <ul style={{ marginTop: '20px', listStyleType: 'none', paddingLeft: '0', marginBottom: '20px' }}>
-            {post.comments ? post.comments.map((comment, index) => (
-              <li key={index} style={{ marginBottom: '10px' }}>{comment.text}</li>
-            )) : <li>No comments found.</li>}
-          </ul>
         </>
       )}
     </div>
