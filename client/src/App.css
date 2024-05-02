@@ -54,6 +54,14 @@ input[type="text"], textarea {
   transition: border-color 0.3s; /* Smooth transition */
 }
 
+.title-input {
+  font-size: 1.25rem;  /* Larger text inside the input */
+  padding: 12px 20px;  /* More padding for better visual and typing space */
+  height: 50px;        /* Optional: Adjust height as needed */
+  width: 100%;         /* Ensures the input stretches to container width */
+  box-sizing: border-box; /* Ensures padding doesn't affect the final size */
+}
+
 
 input[type="text"]:focus, textarea:focus {
   border-color: #0056b3; /* Highlight with primary color */

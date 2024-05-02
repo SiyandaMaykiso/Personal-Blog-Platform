@@ -66,14 +66,15 @@ const CreatePost = () => {
       {successMessage && <div className="success-message">{successMessage}</div>}
       <form onSubmit={handleSubmit} className="form">
         <div className="form-control">
-          <label htmlFor="title">Title</label>
-          <input
-            id="title"
-            name="title"
-            placeholder="Enter post title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+        <label htmlFor="title">Title</label>
+<input
+    className="title-input"  // Add this class
+    id="title"
+    name="title"
+    placeholder="Enter post title"
+    value={title}
+    onChange={(e) => setTitle(e.target.value)}
+/>
         </div>
         <div className="form-control">
           <label htmlFor="content">Content</label>
