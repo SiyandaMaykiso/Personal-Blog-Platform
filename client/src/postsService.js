@@ -1,4 +1,4 @@
-const axios = require('./services/axiosConfig'); // Ensure this is the correct path to your axios configuration
+const axios = require('./services/axiosConfig'); // Correct import path for your Axios configuration
 
 // Utility function for handling errors
 const handleError = (error, message) => {
