@@ -77,7 +77,7 @@ function PostsList() {
       {posts.length > 0 ? (
         posts.map(post => (
           <div key={post.id} className="post-item">
-            <h3 className="post-title" onClick={() => navigate(`/posts/${post.id}`)} style={{ cursor: 'pointer' }}>{post.title}</h3>
+            <h3 className="post-title" onClick={() => navigate(`/post-detail/${post.id}`)} style={{ cursor: 'pointer' }}>{post.title}</h3>
             <p className="post-content">{post.content}</p>
             <button onClick={() => handleEditPost(post.id)} className="btn btn-secondary">Edit</button>
             <button onClick={() => handleDeletePost(post.id)} className="btn btn-danger">Delete</button>
