@@ -56,6 +56,10 @@ const CreatePost = () => {
     }
   };
 
+  const handleNavigateToPosts = () => {
+    navigate('/post-list'); // Navigate back to the post list
+  };
+
   return (
     <div className="post-form-container container">
       <h2>Add New Post</h2>
@@ -84,6 +88,9 @@ const CreatePost = () => {
         {submissionError && <div className="error-message">{submissionError}</div>}
         <button type="submit" disabled={isSubmitting} className="btn btn-primary">
           {isSubmitting ? 'Creating...' : 'Submit Post'}
+        </button>
+        <button type="button" onClick={handleNavigateToPosts} className="btn btn-secondary">
+          Back to Posts
         </button>
       </form>
     </div>
