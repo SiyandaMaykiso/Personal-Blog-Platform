@@ -1,10 +1,10 @@
-// Utility function for handling errors
+
 const handleError = (error, message) => {
   console.error(message, error);
   throw new Error(message);
 };
 
-// Fetch a single post by its ID
+
 export const fetchPost = async (id, getAuthHeader) => {
   try {
     const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, {
@@ -21,7 +21,7 @@ export const fetchPost = async (id, getAuthHeader) => {
   }
 };
 
-// Create a new post
+
 export const createPost = async (postData, getAuthHeader) => {
   try {
     const response = await fetch('https://personal-blog-platform-a11db04dd963.herokuapp.com/posts', {
@@ -39,7 +39,7 @@ export const createPost = async (postData, getAuthHeader) => {
   }
 };
 
-// Update an existing post
+
 export const updatePost = async (id, postData, getAuthHeader) => {
   try {
     const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, {
@@ -57,7 +57,7 @@ export const updatePost = async (id, postData, getAuthHeader) => {
   }
 };
 
-// Delete a post
+
 export const deletePost = async (id, getAuthHeader) => {
   try {
     const response = await fetch(`https://personal-blog-platform-a11db04dd963.herokuapp.com/posts/${id}`, {

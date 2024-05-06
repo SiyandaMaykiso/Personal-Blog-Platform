@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Home from './Home';
 import PostsList from './PostsList';
-import PostDetail from './PostDetail'; // Import the PostDetail component
+import PostDetail from './PostDetail'; 
 import CreatePost from './CreatePost';
 import EditPost from './EditPost';
 import Login from './Login';

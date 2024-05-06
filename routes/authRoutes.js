@@ -5,7 +5,7 @@ const router = express.Router();
 const pool = require('../db');
 require('dotenv').config();
 
-// Register a new user
+
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   const saltRounds = 10;
@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// User login
+
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -60,12 +60,12 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// User logout
+
 router.post('/logout', (req, res) => {
   res.json({ message: "Logged out successfully, please clear your token" });
 });
 
-// Middleware to check if the user is authenticated using JWT
+
 const isAuthenticated = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
@@ -83,12 +83,12 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
-// Check token validity
+
 router.get('/session', isAuthenticated, (req, res) => {
   res.json({ isLoggedIn: true, user: req.user });
 });
 
-// Example protected route
+
 router.get('/protected', isAuthenticated, (req, res) => {
   res.json({ message: "Access to protected route granted", user: req.user });
 });

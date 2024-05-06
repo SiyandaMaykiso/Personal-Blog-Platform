@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext'; // Ensure the path is correct
+import { useAuth } from './contexts/AuthContext'; 
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { authToken, loading: authLoading, logout } = useAuth(); // Include logout function
+  const { authToken, loading: authLoading, logout } = useAuth();
 
   const fetchPosts = useCallback(async () => {
     if (authLoading || !authToken) {
@@ -64,12 +64,12 @@ function PostsList() {
   };
 
   const handleCreatePost = () => {
-    navigate('/create-post'); // Update this path as needed
+    navigate('/create-post'); 
   };
 
   const handleLogout = () => {
     logout();
-    navigate('/login'); // Redirect to login page after logout
+    navigate('/login'); 
   };
 
   if (loading) return <p>Loading posts...</p>;

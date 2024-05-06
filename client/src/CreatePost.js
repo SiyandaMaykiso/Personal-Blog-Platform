@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext'; // Ensure path is correct
+import { useAuth } from './contexts/AuthContext'; 
 
 const CreatePost = () => {
   const navigate = useNavigate();

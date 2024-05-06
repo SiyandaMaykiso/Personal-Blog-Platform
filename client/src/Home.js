@@ -7,15 +7,15 @@ function Home({ onLogin, onRegistration }) {
   const navigate = useNavigate();
 
   const handleLogin = (userData, token) => {
-    localStorage.setItem('jwtToken', token);  // Store the token
-    onLogin(userData);  // Update app state
-    navigate('/post-list');  // Redirect user to post list
+    localStorage.setItem('jwtToken', token); 
+    onLogin(userData); 
+    navigate('/post-list'); 
   };
 
   const handleRegistration = (userData, token) => {
-    localStorage.setItem('jwtToken', token);  // Store the token
-    onRegistration(userData);  // Update app state
-    navigate('/post-list');  // Redirect user to post list
+    localStorage.setItem('jwtToken', token); 
+    onRegistration(userData); 
+    navigate('/post-list'); 
   };
 
   return (

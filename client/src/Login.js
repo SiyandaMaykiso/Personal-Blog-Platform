@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';  // Adjust the path as necessary
+import { useAuth } from './contexts/AuthContext'; 
 
 const Login = () => {
   const { login } = useAuth();
@@ -12,8 +12,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(username, password);  // Assuming your AuthContext's login function can handle username/password
-      navigate('/post-list');  // Redirect on successful login
+      await login(username, password); 
+      navigate('/post-list');  
     } catch (error) {
       console.error('Login error:', error);
       setErrorMessage(error.response ? error.response.data.message : 'Error logging in');

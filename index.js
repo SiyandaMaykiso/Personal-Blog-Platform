@@ -10,16 +10,16 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
-// Helmet setup with enhanced CSP
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"], // Keep or adjust as necessary
+      scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: [
         "'self'", 
         'https://fonts.googleapis.com', 
-        "'unsafe-inline'" // Allows inline styles if needed
+        "'unsafe-inline'" 
       ],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:'],
@@ -30,7 +30,7 @@ app.use(helmet({
   }
 }));
 
-app.use(compression()); // Compress all routes
+app.use(compression()); 
 
 const postsRoutes = require('./routes/postsRoutes');
 const authRoutes = require('./routes/authRoutes');

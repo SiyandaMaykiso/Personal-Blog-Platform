@@ -1,5 +1,5 @@
 .App {
-  font-family: 'Merriweather', serif; /* Elegant serif font */
+  font-family: 'Merriweather', serif; 
   color: #333;
   line-height: 1.6;
   max-width: 800px;
@@ -8,15 +8,15 @@
 }
 
 .App-header {
-  background-color: #f4f4f4; /* Softer shade */
+  background-color: #f4f4f4; 
   padding: 20px 0;
   margin-bottom: 40px;
 }
 
 .App-title {
-  font-size: 2.2rem; /* Larger size */
-  font-weight: bold; /* Increased weight */
-  color: #0056b3; /* Darker shade of blue */
+  font-size: 2.2rem; 
+  font-weight: bold; 
+  color: #0056b3; 
 }
 
 .App-content {
@@ -28,13 +28,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: #0056b3; /* Darker shade for better visibility */
+  color: #0056b3; 
   text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
-  color: #004080; /* Secondary color for hover */
+  color: #004080; 
 }
 
 form {
@@ -49,22 +49,22 @@ input[type="text"], textarea {
   padding: 12px;
   margin: 8px 0;
   box-sizing: border-box;
-  border: 2px solid #ccc; /* Thicker border */
+  border: 2px solid #ccc; 
   border-radius: 4px;
-  transition: border-color 0.3s; /* Smooth transition */
+  transition: border-color 0.3s; 
 }
 
 .title-input {
-  font-size: 1.25rem;  /* Larger text inside the input */
-  padding: 12px 20px;  /* More padding for better visual and typing space */
-  height: 50px;        /* Optional: Adjust height as needed */
-  width: 100%;         /* Ensures the input stretches to container width */
-  box-sizing: border-box; /* Ensures padding doesn't affect the final size */
+  font-size: 1.25rem;  
+  padding: 12px 20px;  
+  height: 50px;        
+  width: 100%;         
+  box-sizing: border-box; 
 }
 
 
 input[type="text"]:focus, textarea:focus {
-  border-color: #0056b3; /* Highlight with primary color */
+  border-color: #0056b3; 
 }
 
 button[type="submit"] {
@@ -75,7 +75,7 @@ button[type="submit"] {
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s; /* Smooth background transition */
+  transition: background-color 0.3s; 
 }
 
 button[type="submit"]:hover {

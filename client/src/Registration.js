@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';  // Ensure the path to AuthContext is correct
+import { useAuth } from './contexts/AuthContext'; 
 
 function Registration() {
   const [username, setUsername] = useState('');
@@ -15,7 +15,7 @@ function Registration() {
     e.preventDefault();
     try {
       await register(username, email, password);
-      navigate('/post-list');  // Navigate to dashboard after successful registration
+      navigate('/post-list'); 
     } catch (error) {
       console.error('Registration error:', error);
       setRegistrationError(error.message || 'Failed to register. Please try again.');

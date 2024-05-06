@@ -4,23 +4,23 @@ const router = express.Router();
 const pool = require('../db');
 require('dotenv').config();
 
-// Middleware to check if the user is authenticated using JWT
+
 const isAuthenticated = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Assume Bearer token
+  const token = req.headers.authorization?.split(' ')[1]; 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized access - no token provided" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Add decoded token data to request object
+    req.user = decoded; 
     next();
   } catch (error) {
     res.status(401).json({ message: "Unauthorized access - invalid token" });
   }
 };
 
-// Fetch all posts by the logged-in user
+
 router.get('/', isAuthenticated, async (req, res) => {
     try {
         const authorId = req.user.userId;
@@ -32,7 +32,7 @@ router.get('/', isAuthenticated, async (req, res) => {
     }
 });
 
-// Fetch a single post by ID, only if it belongs to the logged-in user
+
 router.get('/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
     const authorId = req.user.userId;
@@ -49,10 +49,10 @@ router.get('/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// Create a new post
+
 router.post('/', isAuthenticated, async (req, res) => {
     const { title, content } = req.body;
-    const authorId = req.user.userId; // Access user ID from JWT
+    const authorId = req.user.userId; 
     try {
         const { rows } = await pool.query(
             'INSERT INTO posts (title, content, authorId) VALUES ($1, $2, $3) RETURNING *',
@@ -65,11 +65,11 @@ router.post('/', isAuthenticated, async (req, res) => {
     }
 });
 
-// Update a post, only if it belongs to the logged-in user
+
 router.put('/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
-    const authorId = req.user.userId; // Use user ID from JWT
+    const authorId = req.user.userId; 
     try {
         const { rows } = await pool.query(
             'UPDATE posts SET title = $1, content = $2 WHERE id = $3 AND authorId = $4 RETURNING *',
@@ -86,10 +86,10 @@ router.put('/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// Delete a post, only if it belongs to the logged-in user
+
 router.delete('/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
-    const authorId = req.user.userId; // Use user ID from JWT
+    const authorId = req.user.userId; 
     try {
         const { rowCount } = await pool.query(
             'DELETE FROM posts WHERE id = $1 AND authorId = $2',
